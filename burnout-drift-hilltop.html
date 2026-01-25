@@ -414,8 +414,8 @@
         height: 86px;
       }
     }
-
-  </style>
+</style>
+  <link rel="stylesheet" href="global.css">
   <script src="site-config.js"></script>
   <script>
     if (window.SITE_CONFIG) {
@@ -432,10 +432,8 @@
   <div class="page">
     <header></header>
 
-    <div class="layout">
-      <nav class="rail" aria-label="Quick games"></nav>
-
-      <main>
+    <div class="full-width-section">
+      <div class="hero-row">
         <section class="player-card" aria-label="Game details">
           <div class="player-header">
             <img class="player-thumb" src="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/7422e114-ed81-4550-b436-8073d181b0bb/burnout-drift-hilltop.png" alt="Burnout Drift: Hilltop thumbnail" />
@@ -453,6 +451,16 @@
           </div>
           <div class="player-ad" aria-label="Advertisement">ADVERTISEMENT</div>
         </section>
+        <section class="ad-card" aria-label="Advertisement">ADVERTISEMENT</section>
+      </div>
+    </div>
+
+
+    <div class="layout">
+      <nav class="rail" aria-label="Quick games"></nav>
+
+      <main>
+        
 
         <section class="carousel" aria-label="More games">
           <div class="carousel-row" id="carouselRow"></div>
@@ -470,14 +478,7 @@
 <p>Fans keep coming back because Burnout Drift: Hilltop feels smooth, fair, and instantly replayable. The loop is satisfying, the visuals are clean, and the challenge scales without feeling punishing. If you love games that you can jump into quickly and still master over time, Burnout Drift: Hilltop is the kind of title that fits perfectly into your day.</p></div>
         </section>
       </main>
-
-      <aside>
-        <section class="ad-card" aria-label="Advertisement">ADVERTISEMENT</section>
-        <section class="recommend" aria-label="Recommended games">
-          <div class="recommend-grid" id="recommendGrid"></div>
-        </section>
-      </aside>
-    </div>
+</div>
 
     <footer>
       <p>Enjoy more games on the main portal.</p>
@@ -733,6 +734,7 @@ function selectRandom(items, count, excludeSlug) {
 
     function renderRecommend(items) {
       const grid = document.getElementById("recommendGrid");
+      if (!grid) return;
       grid.innerHTML = items
         .map((item) => {
           return `
@@ -747,6 +749,7 @@ function selectRandom(items, count, excludeSlug) {
 
     function renderCarousel(items) {
       const row = document.getElementById("carouselRow");
+      if (!row) return;
       row.innerHTML = items
         .map((item) => {
           return `

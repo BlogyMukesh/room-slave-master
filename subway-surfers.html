@@ -27,6 +27,7 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Subway Surfers","description":"Play Subway Surfers online and dash through vibrant city tracks, dodge trains, and collect coins in this fast endless runner.","image":"https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/5671f8c843f49a920921f19647a8c5cb/subway-surfers.png","url":"https://example.com/subway-surfers.html","genre":"Game","publisher":{"@type":"Organization","name":"SYBO"},"developer":{"@type":"Organization","name":"SYBO"},"operatingSystem":"Web","applicationCategory":"Game","inLanguage":"en","offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}</script>
 
   <style>
+
     :root {
       --bg: #7defe8;
       --bg-2: #5bd5cc;
@@ -48,11 +49,6 @@
       box-sizing: border-box;
     }
 
-    html {
-      width: 100%;
-      overflow-x: hidden;
-    }
-
     body {
       overflow-x: hidden;
       margin: 0;
@@ -72,22 +68,9 @@
     }
 
     .page {
-      width: 100%;
       max-width: 1280px;
       margin: 0 auto;
       padding: 24px;
-    }
-
-    .full-width-section {
-      width: 100%;
-      margin: 0 0 20px;
-    }
-
-    .hero-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 20px;
-      align-items: start;
     }
 
     header {
@@ -120,23 +103,12 @@
       min-width: 0;
     }
 
-    .hero-row,
-    .layout,
-    main {
-      width: 100%;
-    }
-
-    .hero-row > *,
-    .layout > * {
-      min-width: 0;
-    }
-
     img {
       max-width: 100%;
     }
     .layout {
       display: grid;
-      grid-template-columns: 120px minmax(0, 1fr);
+      grid-template-columns: 120px minmax(0, 1fr) 360px;
       gap: 20px;
     }
 
@@ -155,7 +127,6 @@
     .rec-card,
     .carousel-card {
       position: relative;
-      display: block;
       border-radius: var(--tile-radius);
       overflow: hidden;
       background: #ffffff;
@@ -309,7 +280,7 @@
       font-size: 14px;
       color: var(--text);
     }
-    .player-card {
+.player-card {
       background: var(--panel);
       border-radius: var(--radius-lg);
       padding: 22px;
@@ -318,7 +289,6 @@
       flex-direction: column;
       gap: 18px;
       min-height: 260px;
-      width: 100%;
     }
 
 
@@ -399,12 +369,6 @@
       }
     }
 
-    @media (max-width: 980px) {
-      .hero-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
     @media (max-width: 780px) {
       .player-card {
         grid-template-columns: 1fr;
@@ -422,63 +386,6 @@
 
 
     @media (max-width: 640px) {
-      .page {
-        max-width: 100%;
-        width: 100%;
-        padding: 0;
-      }
-
-      header {
-        margin-bottom: 0;
-      }
-
-      .full-width-section {
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-        margin-top: 0;
-        margin-bottom: 20px;
-      }
-
-      .hero-row {
-        grid-template-columns: 1fr;
-      }
-
-      .player-card {
-        width: 100%;
-        border-radius: 0;
-      }
-
-      .layout {
-        padding: 0 16px;
-        padding-bottom: 120px;
-      }
-
-      nav.rail {
-        display: flex;
-        flex-direction: row;
-        gap: 12px;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 10px 16px;
-        border-radius: 0;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        z-index: 20;
-      }
-
-      .rail-button {
-        width: 72px;
-        height: 72px;
-        flex: 0 0 auto;
-      }
-
-      .carousel {
-        padding: 12px 14px;
-      }
-
       .recommend-grid {
         grid-template-columns: none;
         grid-auto-flow: column;
@@ -488,15 +395,13 @@
       }
 
       .carousel-row {
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 12px;
       }
     }
 
 
     @media (max-width: 520px) {
       .page {
-        padding: 0 0 16px;
+        padding: 16px;
       }
 
       header {
@@ -511,7 +416,8 @@
       }
     }
 
-  </style>
+</style>
+  <link rel="stylesheet" href="global.css">
   <script src="site-config.js"></script>
   <script>
     if (window.SITE_CONFIG) {
