@@ -363,16 +363,33 @@
         })
         .join("");
     }
+    function sendGameClick(href, name) {
+      const callback = () => {
+        if (typeof href === "string") {
+          window.location = href;
+        }
+      };
+      if (typeof window.gtag !== "function") {
+        callback();
+        return;
+      }
+      window.gtag("event", "game_click", {
+        gamename: name,
+        page: "index",
+        debug_mode: true,
+        event_callback: callback,
+        event_timeout: 2000
+      });
+    }
+
     mosaic.addEventListener("click", (event) => {
       const tile = event.target.closest(".tile");
       if (!tile) return;
       const name = tile.dataset.title || tile.getAttribute("aria-label") || "";
-      if (typeof window.gtag === "function") {
-        window.gtag("event", "game_click", {
-          gamename: name,
-          page: "index"
-        });
-      }
+      const href = tile.getAttribute("href");
+      if (!href) return;
+      event.preventDefault();
+      sendGameClick(href, name);
     });
     mosaic.addEventListener(
       "error",
