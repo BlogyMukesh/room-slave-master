@@ -4,6 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Play Online Games</title>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-449VYY7XNQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-449VYY7XNQ", { debug_mode: true });
+  </script>
   <style>
     :root {
       --bg: #7defe8;
@@ -175,24 +184,6 @@
       if (window.SITE_CONFIG.analyticsHTML) {
         document.head.insertAdjacentHTML("beforeend", window.SITE_CONFIG.analyticsHTML);
       }
-    }
-  </script>
-  <!-- Google tag (gtag.js) event - delayed navigation helper -->
-  <script>
-    // Helper function to delay opening a URL until a gtag event is sent.
-    // Call it in response to an action that should navigate to a URL.
-    function gtagSendEvent(url) {
-      var callback = function () {
-        if (typeof url === 'string') {
-          window.location = url;
-        }
-      };
-      gtag('event', 'click', {
-        'event_callback': callback,
-        'event_timeout': 2000,
-        // <event_parameters>
-      });
-      return false;
     }
   </script>
 </head>
@@ -414,17 +405,21 @@
 
 
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252"
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5721995335619271"
      crossorigin="anonymous"></script>
 <!-- ad 2 -->
 <ins class="adsbygoogle"
      style="display:block"
-     data-ad-client="ca-pub-3691583433336252"
+     data-ad-client="ca-pub-5721995335619271"
      data-ad-slot="3339638183"
      data-ad-format="auto"
      data-full-width-responsive="true"></ins>
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<script>
+  // Keep only game_click tracking below.
 </script>
 
 
