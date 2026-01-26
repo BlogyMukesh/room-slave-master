@@ -429,6 +429,57 @@
       }
     }
   </script>
+
+  <!-- Rewarded Ad Trigger -->
+  <script>
+    (function () {
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("DOM fully loaded.");
+
+        function showRewardedAd() {
+          if (!window.googletag || !googletag.cmd) {
+            console.error("Google Ad Manager is not properly initialized.");
+            return;
+          }
+
+          googletag.cmd.push(function () {
+            try {
+              const rewardedSlot = googletag
+                .defineOutOfPageSlot('/23311933196/r_2/reward', googletag.enums.OutOfPageFormat.REWARDED)
+                .addService(googletag.pubads());
+              googletag.pubads().set('page_url', 'https://usa.sacchisarkari.com/');
+              googletag.enableServices();
+              googletag.display(rewardedSlot);
+              console.log("Attempting to display rewarded ad...");
+
+              googletag.pubads().addEventListener("rewardedSlotReady", function (evt) {
+                console.log("Rewarded ad ready.");
+                evt.makeRewardedVisible();
+              });
+
+              googletag.pubads().addEventListener("rewardedSlotClosed", function () {
+                console.log("Ad closed.");
+                googletag.destroySlots([rewardedSlot]);
+              });
+
+              googletag.pubads().addEventListener("slotRenderEnded", function (event) {
+                if (event.isEmpty) {
+                  console.warn("Rewarded ad slot was empty or failed to load.");
+                }
+              });
+            } catch (error) {
+              console.error("Error during rewarded ad setup:", error);
+            }
+          });
+        }
+
+        setTimeout(function() {
+          console.log("2 seconds elapsed, showing rewarded ad...");
+          showRewardedAd();
+        }, 2000);
+      });
+    })();
+  </script>
 </head>
 <body>
   <div class="page">
