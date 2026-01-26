@@ -430,56 +430,92 @@
     }
   </script>
 
-  <!-- Rewarded Ad Trigger -->
-  <script>
-    (function () {
-      document.addEventListener("DOMContentLoaded", function () {
-        console.log("DOM fully loaded.");
+<!-- Rewarded Ad Trigger -->
+<script>
+(function() {
+  document.addEventListener("DOMContentLoaded", function() {
+    console.log("Rewarded Ad system initialized...");
 
-        function showRewardedAd() {
-          if (!window.googletag || !googletag.cmd) {
-            console.error("Google Ad Manager is not properly initialized.");
-            return;
+    let rewardedSlot = null;
+    let showCount = 0; // Track how many times the ad has been made visible
+    const MAX_SHOWS = 2; // Limit to 2 shows
+
+    function loadRewardedAd() {
+      if (showCount >= MAX_SHOWS) {
+        console.log("Max rewarded ad shows reached. Stopping.");
+        return;
+      }
+
+      if (!window.googletag || !googletag.cmd) {
+        console.error("GPT not ready yet, retrying...");
+        setTimeout(loadRewardedAd, 1000);
+        return;
+      }
+
+      googletag.cmd.push(function() {
+        try {
+          console.log("Requesting Rewarded Ad...");
+
+          // Clear old slot before creating new one
+          if (rewardedSlot) {
+            googletag.destroySlots([rewardedSlot]);
+            rewardedSlot = null;
           }
 
-          googletag.cmd.push(function () {
-            try {
-              const rewardedSlot = googletag
-                .defineOutOfPageSlot('/22885893972/r_5', googletag.enums.OutOfPageFormat.REWARDED)
-                .addService(googletag.pubads());
-              googletag.pubads().set('page_url', 'https://game.funkylife.in/');
-              googletag.enableServices();
-              googletag.display(rewardedSlot);
-              console.log("Attempting to display rewarded ad...");
+          // Create new rewarded slot
+          rewardedSlot = googletag
+            .defineOutOfPageSlot('/22885893972/r_5', googletag.enums.OutOfPageFormat.REWARDED)
+            .addService(googletag.pubads());
 
-              googletag.pubads().addEventListener("rewardedSlotReady", function (evt) {
-                console.log("Rewarded ad ready.");
-                evt.makeRewardedVisible();
-              });
+          // Removed page_url setting
+          googletag.enableServices();
 
-              googletag.pubads().addEventListener("rewardedSlotClosed", function () {
-                console.log("Ad closed.");
-                googletag.destroySlots([rewardedSlot]);
-              });
+          // Display ad
+          googletag.display(rewardedSlot);
 
-              googletag.pubads().addEventListener("slotRenderEnded", function (event) {
-                if (event.isEmpty) {
-                  console.warn("Rewarded ad slot was empty or failed to load.");
-                }
-              });
-            } catch (error) {
-              console.error("Error during rewarded ad setup:", error);
-            }
-          });
+        } catch (err) {
+          console.error("Rewarded setup failed:", err);
+          setTimeout(loadRewardedAd, 5000);
         }
-
-        setTimeout(function() {
-          console.log("2 seconds elapsed, showing rewarded ad...");
-          showRewardedAd();
-        }, 2000);
       });
-    })();
-  </script>
+    }
+
+    // --- EVENT HANDLERS ---
+
+    googletag = window.googletag || {cmd: []};
+
+    googletag.cmd.push(function() {
+      googletag.pubads().addEventListener('rewardedSlotReady', function(evt) {
+        if (showCount >= MAX_SHOWS) {
+          console.log("Max shows reached, not displaying.");
+          evt.close(); // Close without showing if limit reached
+          return;
+        }
+        console.log("✅ Rewarded ad ready, showing now...");
+        showCount++; // Increment on show
+        evt.makeRewardedVisible();
+      });
+
+      googletag.pubads().addEventListener('rewardedSlotClosed', function() {
+        console.log(" Ad closed by user — loading next...");
+        setTimeout(loadRewardedAd, 1000);
+      });
+
+      googletag.pubads().addEventListener('slotRenderEnded', function(e) {
+        if (e.isEmpty) {
+          console.warn("️ No fill — retrying in 3s...");
+          setTimeout(loadRewardedAd, 3000);
+        }
+      });
+    });
+
+    // Start immediately
+    loadRewardedAd();
+  });
+})();
+</script>
+
+
 </head>
 <body>
   <div class="page">
