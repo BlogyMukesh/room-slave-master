@@ -1,6 +1,7 @@
 window.SITE_CONFIG = {
   extraHeadHTML: "<meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"referrer\" content=\"no-referrer-when-downgrade\"><script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252\" crossorigin=\"anonymous\"></script>",
   analyticsHTML: "<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-449VYY7XNQ\"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-449VYY7XNQ');</script>",
+  moduleScriptSrc: "/integrate.js",
   adHTML1: "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252\" crossorigin=\"anonymous\"></script><!-- vertical-ad --><ins class=\"adsbygoogle\" style=\"display:inline-block;width:728px;height:90px\" data-ad-client=\"ca-pub-3691583433336252\" data-ad-slot=\"5957745437\"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>",
   adHTML2: "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252\" crossorigin=\"anonymous\"></script><!-- GFL1 --><ins class=\"adsbygoogle\" style=\"display:block\" data-ad-client=\"ca-pub-3691583433336252\" data-ad-slot=\"9877126377\" data-ad-format=\"auto\" data-full-width-responsive=\"true\"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script>"
 };
@@ -65,6 +66,20 @@ window.SITE_CONFIG = {
     appendHTML(target, html);
   }
 
+  function appendModuleScript(src) {
+    if (!src) return;
+    const selector = 'script[type="module"][src="' + src + '"]';
+    if (document.querySelector(selector)) return;
+    const script = document.createElement("script");
+    script.type = "module";
+    script.src = src;
+    if (document.body) {
+      document.body.appendChild(script);
+      return;
+    }
+    document.documentElement.appendChild(script);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     appendHTML(document.head, cfg.extraHeadHTML);
     appendHTML(document.head, cfg.analyticsHTML);
@@ -75,5 +90,7 @@ window.SITE_CONFIG = {
     document.querySelectorAll(".ad-card").forEach((el) => {
       renderAd(el, cfg.adHTML2);
     });
+
+    appendModuleScript(cfg.moduleScriptSrc);
   });
 })();
