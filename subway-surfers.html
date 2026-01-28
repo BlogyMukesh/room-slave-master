@@ -27,7 +27,6 @@
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Subway Surfers","description":"Play Subway Surfers online and dash through vibrant city tracks, dodge trains, and collect coins in this fast endless runner.","image":"https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/5671f8c843f49a920921f19647a8c5cb/subway-surfers.png","url":"https://example.com/subway-surfers.html","genre":"Game","publisher":{"@type":"Organization","name":"SYBO"},"developer":{"@type":"Organization","name":"SYBO"},"operatingSystem":"Web","applicationCategory":"Game","inLanguage":"en","offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}</script>
 
   <style>
-
     :root {
       --bg: #7defe8;
       --bg-2: #5bd5cc;
@@ -127,6 +126,7 @@
     .rec-card,
     .carousel-card {
       position: relative;
+      display: block;
       border-radius: var(--tile-radius);
       overflow: hidden;
       background: #ffffff;
@@ -217,6 +217,190 @@
       gap: 18px;
     }
 
+    .game-shell {
+      background: var(--panel);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .game-frame {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      min-height: 320px;
+      background: #0b1b24;
+    }
+
+    .game-frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--poster-url);
+      background-size: cover;
+      background-position: center;
+      opacity: 0.35;
+      transition: opacity 0.3s ease;
+    }
+
+    .game-iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      background: #000;
+    }
+
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      border: none;
+      background: linear-gradient(160deg, rgba(11, 27, 36, 0.2), rgba(11, 27, 36, 0.7));
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .play-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.92);
+      position: relative;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .play-icon::before {
+      content: "";
+      position: absolute;
+      left: 52%;
+      top: 50%;
+      transform: translate(-40%, -50%);
+      width: 0;
+      height: 0;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-left: 18px solid #0f172a;
+    }
+
+    .play-label {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+
+    .play-sub {
+      font-size: 13px;
+      color: rgba(248, 250, 252, 0.75);
+    }
+
+    .game-frame.is-playing::before {
+      opacity: 0;
+    }
+
+    .game-frame.is-playing .game-iframe {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .game-frame.is-playing .play-overlay {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(1.02);
+    }
+
+    .ad-overlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(5, 10, 15, 0.85);
+      z-index: 2;
+      padding: 16px;
+    }
+
+    .ad-overlay.is-visible {
+      display: flex;
+    }
+
+    .ad-modal {
+      width: min(720px, 100%);
+      background: #0f172a;
+      border-radius: 18px;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.45);
+      color: #e2e8f0;
+      padding: 14px 14px 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .ad-modal header {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ad-timer {
+      font-weight: 700;
+      font-size: 13px;
+      color: rgba(226, 232, 240, 0.8);
+    }
+
+    .ad-close {
+      border: none;
+      background: rgba(226, 232, 240, 0.15);
+      border-radius: 999px;
+      width: 34px;
+      height: 34px;
+      color: #f8fafc;
+      font-weight: 700;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .ad-frame {
+      min-height: 260px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.7);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .ad-actions {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .ad-skip {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #22c55e;
+      color: #0b141f;
+    }
+
+    .ad-skip:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
 
     .player-header {
       display: grid;
@@ -280,7 +464,7 @@
       font-size: 14px;
       color: var(--text);
     }
-.player-card {
+    .player-card {
       background: var(--panel);
       border-radius: var(--radius-lg);
       padding: 22px;
@@ -298,7 +482,7 @@
       gap: 18px;
     }
 
-.recommend {
+    .recommend {
       background: var(--panel);
       border-radius: var(--radius-lg);
       padding: 16px;
@@ -321,8 +505,12 @@
 
     .carousel-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(120px, 1fr);
       gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scroll-snap-type: x mandatory;
     }
 
     .content-box {
@@ -361,7 +549,9 @@
       }
 
       nav.rail {
-        display: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+        justify-items: center;
       }
 
       aside {
@@ -382,6 +572,17 @@
         width: 72px;
         height: 72px;
       }
+
+      .game-frame {
+        min-height: 240px;
+      }
+    }
+
+    @media (orientation: portrait) {
+      .game-frame {
+        aspect-ratio: 9 / 16;
+        min-height: 420px;
+      }
     }
 
 
@@ -395,6 +596,7 @@
       }
 
       .carousel-row {
+        grid-auto-columns: minmax(120px, 1fr);
       }
     }
 
@@ -416,8 +618,7 @@
       }
     }
 
-</style>
-  <link rel="stylesheet" href="global.css">
+  </style>
   <script src="site-config.js"></script>
   <script>
     if (window.SITE_CONFIG) {
@@ -429,100 +630,51 @@
       }
     }
   </script>
-
-<!-- Rewarded Ad Trigger -->
-<script>
-(function() {
-  document.addEventListener("DOMContentLoaded", function() {
-    console.log("Rewarded Ad system initialized...");
-
-    let rewardedSlot = null;
-    let showCount = 0; // Track how many times the ad has been made visible
-    const MAX_SHOWS = 2; // Limit to 2 shows
-
-    function loadRewardedAd() {
-      if (showCount >= MAX_SHOWS) {
-        console.log("Max rewarded ad shows reached. Stopping.");
-        return;
-      }
-
-      if (!window.googletag || !googletag.cmd) {
-        console.error("GPT not ready yet, retrying...");
-        setTimeout(loadRewardedAd, 1000);
-        return;
-      }
-
-      googletag.cmd.push(function() {
-        try {
-          console.log("Requesting Rewarded Ad...");
-
-          // Clear old slot before creating new one
-          if (rewardedSlot) {
-            googletag.destroySlots([rewardedSlot]);
-            rewardedSlot = null;
-          }
-
-          // Create new rewarded slot
-          rewardedSlot = googletag
-            .defineOutOfPageSlot('/22885893972/r_5', googletag.enums.OutOfPageFormat.REWARDED)
-            .addService(googletag.pubads());
-
-          // Removed page_url setting
-          googletag.enableServices();
-
-          // Display ad
-          googletag.display(rewardedSlot);
-
-        } catch (err) {
-          console.error("Rewarded setup failed:", err);
-          setTimeout(loadRewardedAd, 5000);
-        }
-      });
-    }
-
-    // --- EVENT HANDLERS ---
-
-    googletag = window.googletag || {cmd: []};
-
-    googletag.cmd.push(function() {
-      googletag.pubads().addEventListener('rewardedSlotReady', function(evt) {
-        if (showCount >= MAX_SHOWS) {
-          console.log("Max shows reached, not displaying.");
-          evt.close(); // Close without showing if limit reached
-          return;
-        }
-        console.log("✅ Rewarded ad ready, showing now...");
-        showCount++; // Increment on show
-        evt.makeRewardedVisible();
-      });
-
-      googletag.pubads().addEventListener('rewardedSlotClosed', function() {
-        console.log(" Ad closed by user — loading next...");
-        setTimeout(loadRewardedAd, 1000);
-      });
-
-      googletag.pubads().addEventListener('slotRenderEnded', function(e) {
-        if (e.isEmpty) {
-          console.warn("️ No fill — retrying in 3s...");
-          setTimeout(loadRewardedAd, 3000);
-        }
-      });
-    });
-
-    // Start immediately
-    loadRewardedAd();
-  });
-})();
-</script>
-
-
 </head>
 <body>
   <div class="page">
     <header></header>
 
-    <div class="full-width-section">
-      <div class="hero-row">
+    <div class="layout">
+      <nav class="rail" aria-label="Quick games"></nav>
+
+      <main>
+        <section class="game-shell" aria-label="Subway Surfers player">
+          <div class="game-frame" data-game-frame style="--poster-url: url('https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=1200,height=675,fit=cover,f=auto/5671f8c843f49a920921f19647a8c5cb/subway-surfers.png');">
+            <iframe
+              class="game-iframe"
+              title="Subway Surfers game"
+              src="https://gamecollections.me/game/3kh0-assets-main/subway-surfers/"
+              loading="eager"
+              allowfullscreen
+            ></iframe>
+            <div class="ad-overlay" data-ad-overlay aria-hidden="true">
+              <div class="ad-modal">
+                <header>
+                  <div class="ad-timer" data-ad-timer>Skip in 10s</div>
+                  <button class="ad-close" type="button" data-ad-close aria-label="Close ad" disabled>✕</button>
+                </header>
+                <div class="ad-frame">
+                  <ins class="adsbygoogle"
+                       style="display:block"
+                       data-ad-client="ca-pub-3691583433336252"
+                       data-ad-slot="7315360452"
+                       data-ad-format="auto"
+                       data-full-width-responsive="true"></ins>
+                </div>
+                <div class="ad-actions">
+                  <button class="ad-skip" type="button" data-ad-skip disabled>Skip Ad</button>
+                </div>
+              </div>
+            </div>
+            <button class="play-overlay" type="button" aria-label="Play Subway Surfers" data-play-button>
+              <span class="play-icon" aria-hidden="true"></span>
+              <span class="play-label">Play</span>
+              <span class="play-sub">Tap to start</span>
+            </button>
+          </div>
+        </section>
+
         <section class="player-card" aria-label="Game details">
           <div class="player-header">
             <img class="player-thumb" src="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/5671f8c843f49a920921f19647a8c5cb/subway-surfers.png" alt="Subway Surfers thumbnail" />
@@ -538,16 +690,7 @@
               </dl>
             </div>
           </div>
-          <div class="player-ad" aria-label="Advertisement">ADVERTISEMENT</div>
         </section>
-        <section class="ad-card" aria-label="Advertisement">ADVERTISEMENT</section>
-      </div>
-    </div>
-
-    <div class="layout">
-      <nav class="rail" aria-label="Quick games"></nav>
-
-      <main>
 
         <section class="carousel" aria-label="More games">
           <div class="carousel-row" id="carouselRow"></div>
@@ -566,6 +709,11 @@
         </section>
       </main>
 
+      <aside>
+        <section class="recommend" aria-label="Recommended games">
+          <div class="recommend-grid" id="recommendGrid"></div>
+        </section>
+      </aside>
     </div>
 
     <footer>
@@ -801,6 +949,81 @@
       });
     }
 
+    function initGamePlayer() {
+      const frame = document.querySelector("[data-game-frame]");
+      const playButton = document.querySelector("[data-play-button]");
+      const adOverlay = document.querySelector("[data-ad-overlay]");
+      const adTimer = document.querySelector("[data-ad-timer]");
+      const adSkip = document.querySelector("[data-ad-skip]");
+      const adClose = document.querySelector("[data-ad-close]");
+      if (!frame || !playButton) return;
+      let adActive = false;
+      let countdownTimer;
+
+      const startGame = () => {
+        if (frame.classList.contains("is-playing")) return;
+        frame.classList.add("is-playing");
+        playButton.setAttribute("aria-hidden", "true");
+        playButton.disabled = true;
+      };
+
+      const cleanupAndPlay = () => {
+        if (!adOverlay) {
+          startGame();
+          return;
+        }
+        adOverlay.classList.remove("is-visible");
+        adOverlay.setAttribute("aria-hidden", "true");
+        adActive = false;
+        if (countdownTimer) {
+          clearInterval(countdownTimer);
+          countdownTimer = null;
+        }
+        startGame();
+      };
+
+      const showAdThenPlay = () => {
+        if (playButton.disabled || adActive) return;
+        playButton.disabled = true;
+        if (!adOverlay || !adTimer || !adSkip || !adClose) {
+          startGame();
+          return;
+        }
+        adActive = true;
+        let remaining = 10;
+        adSkip.disabled = true;
+        adClose.disabled = true;
+        adTimer.textContent = `Skip in ${remaining}s`;
+        adOverlay.classList.add("is-visible");
+        adOverlay.setAttribute("aria-hidden", "false");
+
+        const tick = () => {
+          remaining -= 1;
+          if (remaining <= 0) {
+            adTimer.textContent = "You can skip now";
+            adSkip.disabled = false;
+            adClose.disabled = false;
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+            return;
+          }
+          adTimer.textContent = `Skip in ${remaining}s`;
+        };
+        countdownTimer = setInterval(tick, 1000);
+
+        adSkip.addEventListener("click", cleanupAndPlay, { once: true });
+        adClose.addEventListener("click", cleanupAndPlay, { once: true });
+
+        try {
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (error) {
+          console.warn("Ad failed to load", error);
+        }
+      };
+
+      playButton.addEventListener("click", showAdThenPlay);
+    }
+
 function selectRandom(items, count, excludeSlug) {
       const filtered = items.filter((item) => item.slug !== excludeSlug);
       return shuffle(filtered).slice(0, count);
@@ -822,7 +1045,6 @@ function selectRandom(items, count, excludeSlug) {
 
     function renderRecommend(items) {
       const grid = document.getElementById("recommendGrid");
-      if (!grid) return;
       grid.innerHTML = items
         .map((item) => {
           return `
@@ -837,7 +1059,6 @@ function selectRandom(items, count, excludeSlug) {
 
     function renderCarousel(items) {
       const row = document.getElementById("carouselRow");
-      if (!row) return;
       row.innerHTML = items
         .map((item) => {
           return `
@@ -878,6 +1099,7 @@ function selectRandom(items, count, excludeSlug) {
       renderCarousel(selectRandom(games, 20, currentSlug));
       injectContentFallback();
       formatDetails();
+      initGamePlayer();
       const dev = document.querySelector(".player-dev");
       if (dev && dev.textContent.trim().toLowerCase() === "unknown") {
         dev.remove();
@@ -887,19 +1109,7 @@ function selectRandom(items, count, excludeSlug) {
     initPage();
 
   </script>
-  <script>
-    if (window.SITE_CONFIG) {
-      if (window.SITE_CONFIG.adHTML1) {
-        document.querySelectorAll(".player-ad").forEach((el) => {
-          el.innerHTML = window.SITE_CONFIG.adHTML1;
-        });
-      }
-      if (window.SITE_CONFIG.adHTML2) {
-        document.querySelectorAll(".ad-card").forEach((el) => {
-          el.innerHTML = window.SITE_CONFIG.adHTML2;
-        });
-      }
-    }
-  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252"
+     crossorigin="anonymous"></script>
 </body>
 </html>
