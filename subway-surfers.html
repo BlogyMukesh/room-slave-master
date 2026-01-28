@@ -399,6 +399,12 @@
       overflow: hidden;
     }
 
+    .ad-frame .adsbygoogle {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
     .ad-actions {
       display: flex;
       justify-content: flex-end;
@@ -1034,11 +1040,23 @@
         adSkip.addEventListener("click", cleanupAndPlay, { once: true });
         adClose.addEventListener("click", cleanupAndPlay, { once: true });
 
-        try {
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        } catch (error) {
-          console.warn("Ad failed to load", error);
-        }
+        const adFrame = adOverlay.querySelector(".ad-frame");
+        let attempts = 0;
+        const tryLoadAd = () => {
+          if (!adFrame) return;
+          const width = adFrame.offsetWidth;
+          if (width <= 0 && attempts < 5) {
+            attempts += 1;
+            requestAnimationFrame(tryLoadAd);
+            return;
+          }
+          try {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (error) {
+            console.warn("Ad failed to load", error);
+          }
+        };
+        requestAnimationFrame(() => requestAnimationFrame(tryLoadAd));
       };
 
       playButton.addEventListener("click", showAdThenPlay);
