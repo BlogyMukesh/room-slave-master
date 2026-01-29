@@ -375,6 +375,27 @@
       cursor: not-allowed;
     }
 
+    .ad-close {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(15, 23, 42, 0.72);
+      color: #f8fafc;
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 22px rgba(2, 6, 23, 0.45);
+    }
+
+    .ad-close[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
 
     .game-thumb {
       position: absolute;
@@ -716,6 +737,7 @@
                        data-ad-format="auto"
                        data-full-width-responsive="true"></ins>
                 </div>
+                <button class="ad-close" type="button" disabled>Close in 10</button>
                 <button class="ad-skip" type="button" disabled>Skip in 10</button>
               </div>
             </div>
@@ -1039,6 +1061,9 @@ function selectRandom(items, count, excludeSlug) {
       const adOverlay = embed.querySelector(".ad-overlay");
       const adFrame = embed.querySelector(".ad-frame");
       const adSkip = embed.querySelector(".ad-skip");
+      const adClose = embed.querySelector(".ad-close");
+      let adIntervalId = null;
+      let adLastClosedAt = 0;
       if (!playButton || !frame) return;
       const src = frame.dataset.src;
       const startGame = () => {
@@ -1064,6 +1089,15 @@ function selectRandom(items, count, excludeSlug) {
               console.warn("Fullscreen request failed:", err);
             }
           }
+        }
+        if (!adIntervalId) {
+          adIntervalId = setInterval(() => {
+            if (embed.dataset.state !== "playing") return;
+            if (!adOverlay || adOverlay.classList.contains("is-visible")) return;
+            const now = Date.now();
+            if (adLastClosedAt && now - adLastClosedAt < 15000) return;
+            showAdOverlay();
+          }, 15000);
         }
       };
 
@@ -1100,22 +1134,40 @@ function selectRandom(items, count, excludeSlug) {
         }
         adOverlay.classList.add("is-visible");
         adOverlay.setAttribute("aria-hidden", "false");
+        const skipDelay = 5;
+        const closeDelay = 10;
         if (adSkip) {
           adSkip.disabled = true;
-          adSkip.textContent = "Skip in 10";
+          adSkip.textContent = "Skip Ad in " + skipDelay;
+        }
+        if (adClose) {
+          adClose.disabled = true;
+          adClose.textContent = "Game starts in " + closeDelay;
         }
 
-        let remaining = 10;
+        let remainingSkip = skipDelay;
+        let remainingClose = closeDelay;
         const tick = () => {
-          remaining -= 1;
-          if (remaining <= 0) {
-            if (adSkip) {
-              adSkip.disabled = false;
-              adSkip.textContent = "Skip";
-            }
+          remainingSkip -= 1;
+          remainingClose -= 1;
+
+          if (remainingSkip <= 0 && adSkip) {
+            adSkip.disabled = false;
+            adSkip.textContent = "Skip Ad";
+          } else if (adSkip) {
+            adSkip.textContent = "Skip Ad in " + Math.max(remainingSkip, 0);
+          }
+
+          if (remainingClose <= 0 && adClose) {
+            adClose.disabled = false;
+            adClose.textContent = "Close";
+          } else if (adClose) {
+            adClose.textContent = "Game starts in " + Math.max(remainingClose, 0);
+          }
+
+          if (remainingSkip <= 0 && remainingClose <= 0) {
             return;
           }
-          if (adSkip) adSkip.textContent = "Skip in " + remaining;
           setTimeout(tick, 1000);
         };
         setTimeout(tick, 1000);
@@ -1126,6 +1178,28 @@ function selectRandom(items, count, excludeSlug) {
         if (!adOverlay) return;
         adOverlay.classList.remove("is-visible");
         adOverlay.setAttribute("aria-hidden", "true");
+      };
+
+      const resumeGameFocus = () => {
+        try {
+          frame.focus();
+        } catch (err) {
+          // Ignore focus errors.
+        }
+        try {
+          if (frame.contentWindow && frame.contentWindow.focus) {
+            frame.contentWindow.focus();
+          }
+        } catch (err) {
+          // Cross-origin focus may be blocked.
+        }
+        try {
+          if (frame.contentWindow && frame.contentWindow.postMessage) {
+            frame.contentWindow.postMessage({ type: "resume" }, "*");
+          }
+        } catch (err) {
+          // Ignore postMessage errors.
+        }
       };
 
       const requestFrameFullscreen = () => {
@@ -1158,12 +1232,22 @@ function selectRandom(items, count, excludeSlug) {
 
       const finishAd = () => {
         hideAdOverlay();
+        adLastClosedAt = Date.now();
         startGame();
+        setTimeout(resumeGameFocus, 50);
+        setTimeout(resumeGameFocus, 350);
       };
 
       if (adSkip) {
         adSkip.addEventListener("click", () => {
           if (adSkip.disabled) return;
+          finishAd();
+        });
+      }
+
+      if (adClose) {
+        adClose.addEventListener("click", () => {
+          if (adClose.disabled) return;
           finishAd();
         });
       }
