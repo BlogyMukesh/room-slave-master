@@ -1148,7 +1148,7 @@ function selectRandom(items, count, excludeSlug) {
         adOverlay.classList.add("is-visible");
         adOverlay.setAttribute("aria-hidden", "false");
         const skipDelay = 5;
-        const closeDelay = 10;
+        const closeDelay = 20;
         if (adSkip) {
           adSkip.disabled = true;
           adSkip.textContent = "Skip Ad in " + skipDelay;
@@ -1161,6 +1161,9 @@ function selectRandom(items, count, excludeSlug) {
         let remainingSkip = skipDelay;
         let remainingClose = closeDelay;
         const tick = () => {
+          if (adOverlay && !adOverlay.classList.contains("is-visible")) {
+            return;
+          }
           remainingSkip -= 1;
           remainingClose -= 1;
 
@@ -1171,16 +1174,17 @@ function selectRandom(items, count, excludeSlug) {
             adSkip.textContent = "Skip Ad in " + Math.max(remainingSkip, 0);
           }
 
-          if (remainingClose <= 0 && adClose) {
-            adClose.disabled = false;
-            adClose.textContent = "Close";
+          if (remainingClose <= 0) {
+            if (adClose) {
+              adClose.disabled = false;
+              adClose.textContent = "Close";
+            }
+            finishAd();
+            return;
           } else if (adClose) {
             adClose.textContent = "Game starts in " + Math.max(remainingClose, 0);
           }
 
-          if (remainingSkip <= 0 && remainingClose <= 0) {
-            return;
-          }
           setTimeout(tick, 1000);
         };
         setTimeout(tick, 1000);
