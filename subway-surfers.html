@@ -1203,8 +1203,6 @@ function selectRandom(items, count, excludeSlug) {
       };
 
       const requestFrameFullscreen = () => {
-        const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
-        if (!isMobile) return;
         const request =
           embed.requestFullscreen ||
           embed.webkitRequestFullscreen ||
