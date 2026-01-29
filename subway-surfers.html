@@ -313,7 +313,20 @@
       border-radius: 0;
     }
 
+    .game-frame.is-fake-fullscreen {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9998;
+      border-radius: 0;
+    }
+
     body.is-fullscreen {
+      overflow: hidden;
+    }
+
+    body.is-fake-fullscreen {
       overflow: hidden;
     }
 
@@ -1203,16 +1216,31 @@ function selectRandom(items, count, excludeSlug) {
       };
 
       const requestFrameFullscreen = () => {
+        const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
+        if (!isMobile) return;
         const request =
           embed.requestFullscreen ||
           embed.webkitRequestFullscreen ||
           embed.mozRequestFullScreen ||
           embed.msRequestFullscreen;
-        if (!request) return;
+        const ua = navigator.userAgent || "";
+        const isiOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+        if (!request) {
+          if (isiOS) {
+            embed.classList.add("is-fake-fullscreen");
+            document.body.classList.add("is-fake-fullscreen");
+          }
+          return;
+        }
         try {
           request.call(embed);
         } catch (err) {
-          console.warn("Fullscreen request failed:", err);
+          if (isiOS) {
+            embed.classList.add("is-fake-fullscreen");
+            document.body.classList.add("is-fake-fullscreen");
+          } else {
+            console.warn("Fullscreen request failed:", err);
+          }
         }
       };
 
