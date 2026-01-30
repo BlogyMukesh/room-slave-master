@@ -159,15 +159,13 @@
       .mosaic {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
+      .tile.small,
+      .tile.medium,
       .tile.featured-center,
       .tile.featured-right {
-        grid-column: span 3;
-        grid-row: span 3;
-      }
-
-      .tile.medium {
-        grid-column: span 2;
-        grid-row: span 2;
+        grid-column: span 1;
+        grid-row: span 1;
+        aspect-ratio: 1 / 1;
       }
     }
 
@@ -194,30 +192,29 @@
   </div>
   <script>
     const games = [
-      { id: 1, title: "Plonky", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/ed3adaca348ed9bf21694505317d402b/plonky.png" },
+      { id: 1, title: "Plonky", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/ed3adaca348ed9bf21694505317d402b/plonky.png" },
+      { id: 24, title: "Temple Run 2", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/b5c8b617f65be7cc4d56dd3657590ae7/temple-run-2.png" },
+      { id: 4, title: "Level Devil", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/0c3d1446c6992c2b88a9498de054688b/level-devil.png" },
+      { id: 6, title: "Blocky Blast Puzzle", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/291aaf2dcf5c1322558a9c038b3c5251/blocky-blast-puzzle.png" },
+      { id: 22, title: "Bubble Shooter", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/2d5e417ea0fc1ef06d746b2cef691c07/bubble-shooter-lak.png" },
+      { id: 20, title: "Stickman Hook", sizeVariant: "featured-right", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=520,height=520,fit=cover,f=auto/99e090d154caf30f3625df7e456d5984/stickman-hook.png" },
+      { id: 3, title: "Stunt Bike Extreme", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/d115380307564d68096317ffd29cbcf9/stunt-bike-extreme.png" },
       { id: 2, title: "Subway Surfers", sizeVariant: "featured-center", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/5671f8c843f49a920921f19647a8c5cb/subway-surfers.png" },
-      { id: 3, title: "Stunt Bike Extreme", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/d115380307564d68096317ffd29cbcf9/stunt-bike-extreme.png" },
-      { id: 4, title: "Level Devil", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/0c3d1446c6992c2b88a9498de054688b/level-devil.png" },
-      { id: 5, title: "MR RACER - Car Racing", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/972a0e3dabb998d2fb8fce785e2c1fa4/mr-racer-car-racing.jfif" },
-      { id: 6, title: "Blocky Blast Puzzle", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/291aaf2dcf5c1322558a9c038b3c5251/blocky-blast-puzzle.png" },
-      { id: 7, title: "MineFun.io", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/3cb08160dbea84214f310a797c19e305/minefun-io.png" },
+      { id: 11, title: "Drive Mad", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/00f074792a313e1c7edd4baa0fa64b89/drive-mad.png" },
       { id: 8, title: "Snake vs Worms", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/45fec2af2d9ef7d08bcbba56699f3339/snake-vs-worms.jpeg" },
       { id: 9, title: "Hill Climb Racing Lite", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/b87616bb88c0e3cb4c150c59fdc767fa/hill-climb-racing-lite.png" },
-      { id: 10, title: "Pool Club", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/fe7b5c8267b63ee56134841474fe0aea/pool-club.png" },
-      { id: 11, title: "Drive Mad", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/00f074792a313e1c7edd4baa0fa64b89/drive-mad.png" },
-      { id: 12, title: "Master Chess", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/505695b9-1b21-47fd-a8e1-93345afb57de/master-chess.png" },
+      { id: 10, title: "Pool Club", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/fe7b5c8267b63ee56134841474fe0aea/pool-club.png" },
+      { id: 7, title: "MineFun.io", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/3cb08160dbea84214f310a797c19e305/minefun-io.png" },
+      { id: 12, title: "Master Chess", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/505695b9-1b21-47fd-a8e1-93345afb57de/master-chess.png" },
       { id: 13, title: "Vortella's Dress Up", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/1278721efe2abf325f1edd646393ecd7/vortellas-dress-up.png" },
-      { id: 14, title: "Planet Destruction", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/70c0e2dd371965b0f7247058aa011250/planet-destruction.png" },
+      { id: 14, title: "Planet Destruction", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/70c0e2dd371965b0f7247058aa011250/planet-destruction.png" },
       { id: 15, title: "Hexellent", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/62533211110f778fe551b19ef1739b13/hexellent.png" },
       { id: 16, title: "Nuts and Bolts: Screwing Puzzle", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/c2d96a7d5b31a4fc74db460b1c0def53/nuts-and-bolts-screwing-puzzle.png" },
-      { id: 17, title: "Smash Karts", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/9c9e529b14731be871b07b89660bbc2a/smash-karts.png" },
       { id: 18, title: "Cricket World Cup", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/a9d84b22bc87dc97bcd8ca7a60893404/cricket-world-cup.png" },
       { id: 19, title: "Count Control Legends", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=520,height=520,fit=cover,f=auto/e612cf6c7083881ffae58f633bcbc304/count-control-legends.png" },
-      { id: 20, title: "Stickman Hook", sizeVariant: "featured-right", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=520,height=520,fit=cover,f=auto/99e090d154caf30f3625df7e456d5984/stickman-hook.png" },
       { id: 21, title: "Stickman Dragon Fight", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/c7d21e8c3962488f12ef86e2521b6697/stickman-dragon-fight.png" },
-      { id: 22, title: "Bubble Shooter", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/2d5e417ea0fc1ef06d746b2cef691c07/bubble-shooter-lak.png" },
       { id: 23, title: "Scary Teacher 3D", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/ef999c8420c11a5243237168e8128d5d/scary-teacher-3d.png" },
-      { id: 24, title: "Temple Run 2", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/b5c8b617f65be7cc4d56dd3657590ae7/temple-run-2.png" },
+      { id: 5, title: "MR RACER - Car Racing", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/972a0e3dabb998d2fb8fce785e2c1fa4/mr-racer-car-racing.jfif" },
       { id: 25, title: "Little Master Cricket", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/e59cb3dd8207039fa03a8745c4917e18/little-master-cricket.png" },
       { id: 26, title: "Water Color Sort", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/bea9b33040f3776e709fbe8c6e23c623/water-color-sort.png" },
       { id: 27, title: "Rocket Soccer Derby", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/e521bbbf13a6480b60d75421e7edc8d8d0e1edadaccd7d43438864b62a74088a/rocket-soccer-derby.png" },
