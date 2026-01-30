@@ -22,6 +22,9 @@
   <meta name="twitter:description" content="Play Stickman Hook online and swing through levels with satisfying momentum and timing." />
   <meta name="twitter:image" content="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=520,height=520,fit=cover,f=auto/99e090d154caf30f3625df7e456d5984/stickman-hook.png" />
   <meta name="twitter:url" content="https://example.com/stickman-hook.html" />
+  <link rel="preconnect" href="https://s3.ap-south-1.amazonaws.com" />
+  <link rel="dns-prefetch" href="https://s3.ap-south-1.amazonaws.com" />
+
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252" crossorigin="anonymous"></script>
 
@@ -1277,6 +1280,9 @@ function selectRandom(items, count, excludeSlug) {
 
       playButton.addEventListener("click", () => {
         if (embed.dataset.state === "playing") return;
+        if (src && !frame.getAttribute("src")) {
+          frame.src = src;
+        }
         requestFrameFullscreen();
         showAdOverlay();
       });

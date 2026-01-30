@@ -22,6 +22,9 @@
   <meta name="twitter:description" content="Play Stunt Bike Extreme online and take on daring tracks with precise timing and control." />
   <meta name="twitter:image" content="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/d115380307564d68096317ffd29cbcf9/stunt-bike-extreme.png" />
   <meta name="twitter:url" content="https://example.com/stunt-bike-extreme.html" />
+  <link rel="preconnect" href="https://g.igroutka.ru" />
+  <link rel="dns-prefetch" href="https://g.igroutka.ru" />
+
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252" crossorigin="anonymous"></script>
 
@@ -1277,6 +1280,9 @@ function selectRandom(items, count, excludeSlug) {
 
       playButton.addEventListener("click", () => {
         if (embed.dataset.state === "playing") return;
+        if (src && !frame.getAttribute("src")) {
+          frame.src = src;
+        }
         requestFrameFullscreen();
         showAdOverlay();
       });

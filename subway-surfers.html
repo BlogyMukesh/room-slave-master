@@ -23,6 +23,9 @@
   <meta name="twitter:image" content="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/5671f8c843f49a920921f19647a8c5cb/subway-surfers.png" />
   <meta name="twitter:url" content="https://example.com/subway-surfers.html" />
 
+  <link rel="preconnect" href="https://gamecollections.me" />
+  <link rel="dns-prefetch" href="https://gamecollections.me" />
+
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252" crossorigin="anonymous"></script>
 
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://example.com/index.html"},{"@type":"ListItem","position":2,"name":"Games","item":"https://example.com/index.html"},{"@type":"ListItem","position":3,"name":"Subway Surfers","item":"https://example.com/subway-surfers.html"}]}</script>
@@ -473,6 +476,46 @@
       border-left: 16px solid #081c24;
     }
 
+    .back-fab {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(15, 23, 42, 0.65);
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+      z-index: 9;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(2, 6, 23, 0.3);
+      transition: transform 0.15s ease, background 0.15s ease;
+      padding: 0;
+      display: none;
+    }
+
+    .back-fab:hover,
+    .back-fab:focus-visible {
+      transform: scale(1.05);
+      background: rgba(15, 23, 42, 0.85);
+    }
+
+    .back-fab svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    .game-embed.show-back .back-fab {
+      display: grid;
+    }
+
+    .ad-overlay.is-visible ~ .back-fab {
+      display: none;
+    }
+
     .game-iframe {
       position: absolute;
       inset: 0;
@@ -480,6 +523,7 @@
       height: 100%;
       border: 0;
       display: none;
+      z-index: 1;
     }
 
     .game-embed[data-state="playing"] .game-thumb,
@@ -743,6 +787,11 @@
               allowfullscreen
               data-src="https://gamecollections.me/game/3kh0-assets-main/subway-surfers-ny/"
             ></iframe>
+            <button class="back-fab" type="button" aria-label="Go back">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
             <div class="ad-overlay" aria-hidden="true">
               <div class="ad-modal">
                 <div class="ad-frame">
@@ -1108,17 +1157,14 @@ function selectRandom(items, count, excludeSlug) {
         }
         const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
         if (isMobile) {
-          const targets = [frame, embed];
-          for (const target of targets) {
-            const request =
-              target.requestFullscreen ||
-              target.webkitRequestFullscreen ||
-              target.mozRequestFullScreen ||
-              target.msRequestFullscreen;
-            if (!request) continue;
+          const request =
+            embed.requestFullscreen ||
+            embed.webkitRequestFullscreen ||
+            embed.mozRequestFullScreen ||
+            embed.msRequestFullscreen;
+          if (request) {
             try {
-              request.call(target);
-              break;
+              request.call(embed);
             } catch (err) {
               console.warn("Fullscreen request failed:", err);
             }
@@ -1165,6 +1211,9 @@ function selectRandom(items, count, excludeSlug) {
         if (!adOverlay) {
           startGame();
           return;
+        }
+        if (src && !frame.getAttribute("src")) {
+          frame.src = src;
         }
         adOverlay.classList.add("is-visible");
         adOverlay.setAttribute("aria-hidden", "false");
@@ -1277,6 +1326,10 @@ function selectRandom(items, count, excludeSlug) {
 
       playButton.addEventListener("click", () => {
         if (embed.dataset.state === "playing") return;
+        embed.classList.add("show-back");
+        if (src && !frame.getAttribute("src")) {
+          frame.src = src;
+        }
         requestFrameFullscreen();
         showAdOverlay();
       });
@@ -1345,6 +1398,14 @@ function selectRandom(items, count, excludeSlug) {
           el.innerHTML = window.SITE_CONFIG.adHTML2;
         });
       }
+    }
+  </script>
+  <script>
+    const backFab = document.querySelector(".back-fab");
+    if (backFab) {
+      backFab.addEventListener("click", () => {
+        window.history.back();
+      });
     }
   </script>
 </body>

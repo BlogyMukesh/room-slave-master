@@ -22,6 +22,9 @@
   <meta name="twitter:description" content="Play Plonky online and enjoy a fast, accessible browser game experience." />
   <meta name="twitter:image" content="https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/ed3adaca348ed9bf21694505317d402b/plonky.png" />
   <meta name="twitter:url" content="https://example.com/plonky.html" />
+  <link rel="preconnect" href="https://g.igroutka.ru" />
+  <link rel="dns-prefetch" href="https://g.igroutka.ru" />
+
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252" crossorigin="anonymous"></script>
 
@@ -445,6 +448,7 @@
       transform: scale(1.05);
       box-shadow: 0 14px 30px rgba(8, 32, 45, 0.4);
     }
+
 
     .play-icon {
       width: 68px;
@@ -1270,13 +1274,18 @@ function selectRandom(items, count, excludeSlug) {
       };
 
       document.addEventListener("fullscreenchange", () => {
-        const isFull = document.fullscreenElement === embed;
+        const isFull =
+          document.fullscreenElement === embed ||
+          document.fullscreenElement === frame;
         embed.classList.toggle("is-fullscreen", isFull);
         document.body.classList.toggle("is-fullscreen", isFull);
       });
 
       playButton.addEventListener("click", () => {
         if (embed.dataset.state === "playing") return;
+        if (src && !frame.getAttribute("src")) {
+          frame.src = src;
+        }
         requestFrameFullscreen();
         showAdOverlay();
       });
