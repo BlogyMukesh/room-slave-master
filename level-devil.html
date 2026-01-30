@@ -786,6 +786,15 @@
   <script>
     const currentSlug = "level-devil";
 
+    const playableSlugs = [
+      "plonky",
+      "drive-mad",
+      "stunt-bike-extreme",
+      "temple-run-2",
+      "stickman-hook",
+      "level-devil"
+    ];
+
     const embeddedGames = [
 { id: 1, title: "Plonky", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/ed3adaca348ed9bf21694505317d402b/plonky.png" },
       { id: 2, title: "Subway Surfers", sizeVariant: "featured-center", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/5671f8c843f49a920921f19647a8c5cb/subway-surfers.png" },
@@ -1060,6 +1069,15 @@ function selectRandom(items, count, excludeSlug) {
         .join("");
     }
 
+    function prioritizeGames(items, slugs, count, excludeSlug) {
+      const preferred = items.filter((item) => slugs.includes(item.slug));
+      const remaining = items.filter((item) => !slugs.includes(item.slug));
+      const merged = preferred.concat(remaining);
+      const filtered = excludeSlug ? merged.filter((item) => item.slug !== excludeSlug) : merged;
+      return filtered.slice(0, count);
+    }
+
+
     function injectContentFallback() {
       const contentBox = document.getElementById("contentBox");
       if (!contentBox) return;
@@ -1300,9 +1318,9 @@ function selectRandom(items, count, excludeSlug) {
 
     function initPage() {
       const games = loadGamesFromEmbedded();
-      renderRail(selectRandom(games, 14, currentSlug));
+      renderRail(prioritizeGames(games, playableSlugs, 14, currentSlug));
       renderRecommend(selectRandom(games, 12, currentSlug));
-      renderCarousel(selectRandom(games, 20, currentSlug));
+      renderCarousel(prioritizeGames(games, playableSlugs, 20, currentSlug));
       injectContentFallback();
       formatDetails();
       initGameEmbed();
