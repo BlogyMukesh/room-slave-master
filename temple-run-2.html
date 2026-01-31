@@ -789,16 +789,25 @@
           (function initCarouselAd() {
             const ins = document.querySelector(".carousel-ad ins.adsbygoogle");
             if (!ins || ins.dataset.loaded === "true") return;
-            const tryLoad = () => {
-              const width = ins.getBoundingClientRect().width;
-              if (width > 0) {
-                (window.adsbygoogle = window.adsbygoogle || []).push({});
-                ins.dataset.loaded = "true";
-              } else {
-                setTimeout(tryLoad, 200);
-              }
+            const tryLoad = (attemptsLeft) => {
+              requestAnimationFrame(() => {
+                const width = ins.getBoundingClientRect().width;
+                if (width > 0) {
+                  (window.adsbygoogle = window.adsbygoogle || []).push({});
+                  ins.dataset.loaded = "true";
+                  return;
+                }
+                if (attemptsLeft > 0) {
+                  setTimeout(() => tryLoad(attemptsLeft - 1), 200);
+                }
+              });
             };
-            tryLoad();
+            const start = () => tryLoad(10);
+            if (document.readyState === "complete") {
+              start();
+            } else {
+              window.addEventListener("load", start, { once: true });
+            }
           })();
         </script>
         <section class="carousel" aria-label="More games">
