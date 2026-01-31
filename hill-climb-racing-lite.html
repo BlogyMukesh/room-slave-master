@@ -1281,7 +1281,17 @@ function selectRandom(items, count, excludeSlug) {
         if (src && !frame.getAttribute("src")) {
           frame.src = src;
         }
-        requestFrameFullscreen();
+                const gameTitle = (document.querySelector('.player-text h1') || {}).textContent || playButton.getAttribute('aria-label') || '';
+        const gameName = gameTitle.replace(/^Play\s+/i, '').trim();
+        const pageSlug = typeof currentSlug === 'string' ? currentSlug : (location.pathname || '').split('/').pop().replace(/\.html$/, '');
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'play_click', {
+            gamename: gameName,
+            page: pageSlug,
+            debug_mode: true
+          });
+        }
+requestFrameFullscreen();
         showAdOverlay();
       });
 
