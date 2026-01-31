@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"
+      defer
+    ></script>
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+      }
+
+      section {
+        width: 100vw;
+        height: 100vh;
+      }
+
+      .game-wrapper {
+        width: 100%;
+        height: 100%;
+      }
+
+      .game-player {
+        width: 100%;
+        height: 100%;
+        border: 0;
+        display: block;
+        background: #000;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section
+      x-data="{
+        currentUrl: 'https://app-231706.games.s3.yandex.net/231706/pp9innnqkv8w0x2io3pqpr33uukoay9r/index.html',
+        isPageLoaded: false,
+        init() {
+          window.addEventListener('load', () => this.isPageLoaded = true);
+        },
+        goFullscreen() {
+          const iframe = document.getElementById('game-iframe');
+          if (iframe.requestFullscreen) iframe.requestFullscreen();
+          else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+          else if (iframe.msRequestFullscreen) iframe.msRequestFullscreen();
+        }
+      }"
+    >
+      <div class="game-wrapper">
+        <iframe
+          id="game-iframe"
+          :src="isPageLoaded ? currentUrl : ''"
+          class="game-player"
+          title="Hill Climb"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </section>
+  </body>
+</html>
