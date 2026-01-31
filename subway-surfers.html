@@ -1330,6 +1330,13 @@ function selectRandom(items, count, excludeSlug) {
         if (src && !frame.getAttribute("src")) {
           frame.src = src;
         }
+        if (typeof window.gtag === "function") {
+          window.gtag("event", "play_click", {
+            gamename: "Subway Surfers",
+            page: "subway-surfers",
+            debug_mode: true
+          });
+        }
         requestFrameFullscreen();
         showAdOverlay();
       });
