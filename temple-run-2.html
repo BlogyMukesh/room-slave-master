@@ -522,21 +522,6 @@
       overflow: hidden;
     }
 
-    .carousel-ad {
-      background: var(--panel);
-      border-radius: var(--radius-lg);
-      padding: 16px;
-      box-shadow: var(--shadow);
-      text-align: center;
-      min-height: 120px;
-    }
-
-    .carousel-ad ins.adsbygoogle {
-      display: block;
-      width: 100%;
-      min-height: 90px;
-    }
-
     .carousel-row {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
@@ -777,39 +762,6 @@
             </div>
           </div>
         </section>
-        <section class="carousel-ad" aria-label="Advertisement">
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-3691583433336252"
-               data-ad-slot="7315360452"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-        </section>
-        <script>
-          (function initCarouselAd() {
-            const ins = document.querySelector(".carousel-ad ins.adsbygoogle");
-            if (!ins || ins.dataset.loaded === "true") return;
-            const tryLoad = (attemptsLeft) => {
-              requestAnimationFrame(() => {
-                const width = ins.getBoundingClientRect().width;
-                if (width > 0) {
-                  (window.adsbygoogle = window.adsbygoogle || []).push({});
-                  ins.dataset.loaded = "true";
-                  return;
-                }
-                if (attemptsLeft > 0) {
-                  setTimeout(() => tryLoad(attemptsLeft - 1), 200);
-                }
-              });
-            };
-            const start = () => tryLoad(10);
-            if (document.readyState === "complete") {
-              start();
-            } else {
-              window.addEventListener("load", start, { once: true });
-            }
-          })();
-        </script>
         <section class="carousel" aria-label="More games">
           <div class="carousel-row" id="carouselRow"></div>
         </section>
