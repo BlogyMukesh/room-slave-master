@@ -1337,7 +1337,7 @@ requestFrameFullscreen();
       renderCarousel(prioritizeGames(games, playableSlugs, 20, currentSlug));
       injectContentFallback();
       formatDetails();
-      initGameEmbed();
+      if (window.initGameEmbeds) { window.initGameEmbeds(); }
       const dev = document.querySelector(".player-dev");
       if (dev && dev.textContent.trim().toLowerCase() === "unknown") {
         dev.remove();
