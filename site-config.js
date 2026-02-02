@@ -97,6 +97,20 @@ window.SITE_CONFIG = {
   const iframeUrls = Array.isArray(cfg.iframeUrls)
     ? cfg.iframeUrls.filter((url) => typeof url === "string" && url.trim())
     : [];
+  const pinnedCarouselSlugs = [
+    "subway-surfers",
+    "temple-run-2",
+    "stickman-hook",
+    "stunt-bike-extreme",
+    "drive-mad",
+    "plonky",
+    "level-devil",
+    "hill-climb-racing-lite",
+    "snake-vs-worms",
+    "bubble-shooter",
+    "blocky-blast-puzzle",
+    "candy-crush"
+  ];
 
   function pickRandom(items) {
     if (!items || !items.length) return "";
@@ -447,6 +461,27 @@ window.SITE_CONFIG = {
 
   window.initGameEmbeds = initGameEmbeds;
 
+  function pinCarouselItems() {
+    const row = document.getElementById("carouselRow");
+    if (!row) return;
+    const cards = Array.from(row.querySelectorAll("a.carousel-card"));
+    if (!cards.length) return;
+    const lookup = new Map();
+    cards.forEach((card) => {
+      const href = card.getAttribute("href") || "";
+      const slug = href.replace(/\.html$/, "").split("/").pop();
+      if (slug) {
+        lookup.set(slug, card);
+      }
+    });
+    pinnedCarouselSlugs.forEach((slug) => {
+      const card = lookup.get(slug);
+      if (card) {
+        row.insertBefore(card, row.firstChild);
+      }
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     appendHTML(document.head, cfg.extraHeadHTML);
     appendHTML(document.head, cfg.analyticsHTML);
@@ -462,6 +497,8 @@ window.SITE_CONFIG = {
 
     ensureGameEmbed();
     initGameEmbeds();
+    pinCarouselItems();
+    setTimeout(pinCarouselItems, 250);
     appendModuleScript(cfg.moduleScriptSrc);
   });
 })();
