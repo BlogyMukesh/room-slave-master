@@ -1338,7 +1338,11 @@ function selectRandom(items, count, excludeSlug) {
           });
         }
         requestFrameFullscreen();
-        showAdOverlay();
+        startGame();
+        const canShowAd = !!(adOverlay && adFrame && window.adsbygoogle);
+        if (canShowAd) {
+          showAdOverlay();
+        }
       });
 
       const finishAd = () => {
