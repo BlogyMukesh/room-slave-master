@@ -627,6 +627,7 @@
 </style>
   <link rel="stylesheet" href="global.css">
   <script src="site-config.js"></script>
+  <script src="debug.js"></script>
   <script>
     if (window.SITE_CONFIG) {
       if (window.SITE_CONFIG.extraHeadHTML) {
@@ -1100,11 +1101,17 @@ function selectRandom(items, count, excludeSlug) {
       const adFrame = embed.querySelector(".ad-frame");
       const adSkip = embed.querySelector(".ad-skip");
       const adClose = embed.querySelector(".ad-close");
+      const debug = window.PLAY_DEBUG;
+      const logDebug = (message, data) => {
+        if (!debug || !debug.enabled) return;
+        debug.log(message, data);
+      };
       let adIntervalId = null;
       let adLastClosedAt = 0;
       if (!playButton || !frame) return;
       const src = frame.dataset.src;
       const startGame = () => {
+        logDebug("startGame");
         if (embed.dataset.state === "playing") return;
         embed.dataset.state = "playing";
         if (src) {
@@ -1166,6 +1173,7 @@ function selectRandom(items, count, excludeSlug) {
       };
 
       const showAdOverlay = () => {
+        logDebug("showAdOverlay");
         if (!adOverlay) {
           startGame();
           return;
@@ -1282,6 +1290,7 @@ function selectRandom(items, count, excludeSlug) {
       });
 
       playButton.addEventListener("click", () => {
+        logDebug("playClick");
         if (embed.dataset.state === "playing") return;
         if (src && !frame.getAttribute("src")) {
           frame.src = src;
@@ -1297,10 +1306,15 @@ function selectRandom(items, count, excludeSlug) {
           });
         }
 requestFrameFullscreen();
-        showAdOverlay();
+        startGame();
+        const canShowAd = !!(adOverlay && adFrame && window.adsbygoogle);
+        if (canShowAd) {
+          showAdOverlay();
+        }
       });
 
       const finishAd = () => {
+        logDebug("finishAd");
         hideAdOverlay();
         adLastClosedAt = Date.now();
         startGame();
@@ -1342,7 +1356,7 @@ requestFrameFullscreen();
       renderCarousel(prioritizeGames(games, playableSlugs, 20, currentSlug));
       injectContentFallback();
       formatDetails();
-      if (window.initGameEmbeds) { window.initGameEmbeds(); }
+      initGameEmbed();
       const dev = document.querySelector(".player-dev");
       if (dev && dev.textContent.trim().toLowerCase() === "unknown") {
         dev.remove();

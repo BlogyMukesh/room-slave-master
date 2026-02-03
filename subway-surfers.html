@@ -535,67 +535,6 @@
       display: block;
     }
 
-    .play-toast {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      max-width: min(360px, calc(100vw - 32px));
-      background: rgba(15, 23, 42, 0.92);
-      color: #f8fafc;
-      padding: 10px 14px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      box-shadow: 0 10px 24px rgba(2, 6, 23, 0.35);
-      opacity: 0;
-      display: block;
-      pointer-events: none;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-      transform: translateY(-6px);
-      z-index: 2147483647;
-    }
-
-    .play-toast.is-visible {
-      opacity: 1 !important;
-      transform: translateY(0);
-    }
-
-    .play-toast.is-always-visible {
-      opacity: 1 !important;
-      transform: translateY(0) !important;
-    }
-
-    .play-debug-panel {
-      position: fixed;
-      top: 56px;
-      right: 16px;
-      max-width: min(420px, calc(100vw - 32px));
-      background: rgba(2, 6, 23, 0.92);
-      color: #e2e8f0;
-      font-size: 12px;
-      line-height: 1.4;
-      padding: 10px 12px;
-      border-radius: 10px;
-      box-shadow: 0 10px 24px rgba(2, 6, 23, 0.35);
-      z-index: 2147483647;
-      display: none;
-      white-space: pre-wrap;
-    }
-
-    .play-debug-panel.is-visible {
-      display: block;
-    }
-
-    .play-debug-title {
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: #f8fafc;
-    }
-
-    .play-debug-line {
-      opacity: 0.9;
-    }
 
 
     aside {
@@ -729,6 +668,7 @@
 </style>
   <link rel="stylesheet" href="global.css">
   <script src="site-config.js"></script>
+  <script src="debug.js"></script>
   <script>
     if (window.SITE_CONFIG) {
       if (window.SITE_CONFIG.extraHeadHTML) {
@@ -893,85 +833,8 @@
       <p>Enjoy more games on the main portal.</p>
     </footer>
   </div>
-  <div class="play-toast" role="status" aria-live="polite"></div>
-  <div class="play-debug-panel" aria-live="polite">
-    <div class="play-debug-title">Play Debug Logs</div>
-    <div class="play-debug-lines"></div>
-  </div>
-  <script>
-    (function() {
-      const toast = document.querySelector(".play-toast");
-      if (toast) {
-        toast.textContent = "Play debug enabled";
-        toast.classList.add("is-visible", "is-always-visible");
-        if (typeof console !== "undefined" && console.log) {
-          console.log("[play-debug] toast mounted");
-        }
-      }
-      const panel = document.querySelector(".play-debug-panel");
-      if (panel) {
-        panel.classList.add("is-visible");
-        const lines = panel.querySelector(".play-debug-lines");
-        if (lines) {
-          lines.textContent = "boot: panel mounted";
-        }
-        if (typeof console !== "undefined" && console.log) {
-          console.log("[play-debug] panel mounted");
-        }
-      }
-      window.__PLAY_DEBUG_LOG__ = function(message, data) {
-        const lines = document.querySelector(".play-debug-lines");
-        const ts = new Date().toISOString();
-        const payload = data ? " " + JSON.stringify(data) : "";
-        if (lines) {
-          lines.textContent = `${ts} ${message}${payload}`;
-        }
-        if (typeof console !== "undefined" && console.log) {
-          console.log("[play-debug]", message, data || "");
-        }
-      };
-      window.addEventListener("error", (event) => {
-        if (window.__PLAY_DEBUG_LOG__) {
-          window.__PLAY_DEBUG_LOG__("window.error", {
-            message: event.message,
-            filename: event.filename,
-            lineno: event.lineno,
-            colno: event.colno
-          });
-        }
-      });
-      window.addEventListener("unhandledrejection", (event) => {
-        if (window.__PLAY_DEBUG_LOG__) {
-          window.__PLAY_DEBUG_LOG__("unhandledrejection", { reason: String(event.reason) });
-        }
-      });
-      let checks = 0;
-      const maxChecks = 50;
-      const checkTimer = setInterval(() => {
-        checks += 1;
-        const lines = document.querySelector(".play-debug-lines");
-        if (lines) {
-          const initPage = window.__PLAY_DEBUG_PAGE__ ? "yes" : "no";
-          const initEmbed = window.__PLAY_DEBUG_INIT__ ? "yes" : "no";
-          const current = lines.textContent || "";
-          if (!current || current.startsWith("boot: panel mounted")) {
-            lines.textContent = `boot: panel mounted\ninitPage: ${initPage}\ninitGameEmbed: ${initEmbed}\nchecks: ${checks}`;
-          }
-          if (initPage === "yes" && initEmbed === "yes") {
-            clearInterval(checkTimer);
-          }
-        }
-        if (checks >= maxChecks) {
-          clearInterval(checkTimer);
-        }
-      }, 500);
-    })();
-  </script>
 
   <script>
-    const ENABLE_PLAY_TOAST = true;
-    const PLAY_TOAST_ALWAYS_VISIBLE = true;
-    const ENABLE_PLAY_DEBUG_LOGS = true;
     const currentSlug = "subway-surfers";
 
     const playableSlugs = [
@@ -1276,7 +1139,6 @@ function selectRandom(items, count, excludeSlug) {
     }
 
     function initGameEmbed() {
-      window.__PLAY_DEBUG_INIT__ = true;
       const embed = document.querySelector(".game-embed");
       if (!embed) return;
       const playButton = embed.querySelector(".game-play");
@@ -1285,99 +1147,36 @@ function selectRandom(items, count, excludeSlug) {
       const adFrame = embed.querySelector(".ad-frame");
       const adSkip = embed.querySelector(".ad-skip");
       const adClose = embed.querySelector(".ad-close");
-      const toastEl = document.querySelector(".play-toast");
-      const debugPanel = document.querySelector(".play-debug-panel");
-      const debugLines = document.querySelector(".play-debug-lines");
-      let toastTimer = null;
-      const debugLogs = [];
+      const debug = window.PLAY_DEBUG;
+      const logDebug = (message, data) => {
+        if (!debug || !debug.enabled) return;
+        debug.log(message, data);
+      };
       let adIntervalId = null;
       let adLastClosedAt = 0;
       if (!playButton || !frame) return;
       const src = frame.dataset.src;
-      const logPlay = (message, data) => {
-        if (!ENABLE_PLAY_DEBUG_LOGS) return;
-        const entry = {
-          ts: new Date().toISOString(),
-          message,
-          data: data || null
-        };
-        debugLogs.push(entry);
-        window.__PLAY_DEBUG_LOGS__ = debugLogs.slice(-200);
-        if (typeof console !== "undefined" && console.log) {
-          console.log("[play-debug]", entry);
-        }
-        if (debugPanel && debugLines) {
-          const lines = window.__PLAY_DEBUG_LOGS__.slice(-12).map((item) => {
-            const msg = item.message || "log";
-            const data = item.data ? " " + JSON.stringify(item.data) : "";
-            return `${item.ts} ${msg}${data}`;
-          });
-          debugLines.textContent = lines.join("\n");
-          debugPanel.classList.add("is-visible");
-        }
-      };
-      const showToast = (message, duration = 1800) => {
-        if (!ENABLE_PLAY_TOAST || !toastEl) return;
-        toastEl.textContent = message;
-        toastEl.classList.add("is-visible");
-        if (PLAY_TOAST_ALWAYS_VISIBLE) {
-          toastEl.classList.add("is-always-visible");
-        }
-        if (toastTimer) {
-          clearTimeout(toastTimer);
-        }
-        if (!PLAY_TOAST_ALWAYS_VISIBLE) {
-          toastTimer = setTimeout(() => {
-            toastEl.classList.remove("is-visible");
-          }, duration);
-        }
-      };
-      if (toastEl && ENABLE_PLAY_TOAST) {
-        toastEl.textContent = "Play debug enabled";
-        toastEl.classList.add("is-visible");
-        if (PLAY_TOAST_ALWAYS_VISIBLE) {
-          toastEl.classList.add("is-always-visible");
-        }
-      }
-      showToast("Play debug enabled");
-      if (debugLines) {
-        debugLines.textContent = "initGameEmbed: attached";
-      }
-      logPlay("initGameEmbed", { hasEmbed: !!embed, hasFrame: !!frame });
-      if (typeof window !== "undefined") {
-        window.addEventListener("error", (event) => {
-          logPlay("window.error", {
-            message: event.message,
-            filename: event.filename,
-            lineno: event.lineno,
-            colno: event.colno
-          });
-        });
-        window.addEventListener("unhandledrejection", (event) => {
-          logPlay("unhandledrejection", { reason: String(event.reason) });
-        });
-      }
       const startGame = () => {
+        logDebug("startGame");
         if (embed.dataset.state === "playing") return;
         embed.dataset.state = "playing";
         if (src) {
           frame.src = src;
         }
-        logPlay("startGame", { srcSet: !!frame.getAttribute("src") });
-        showToast("Starting game…");
         const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
         if (isMobile) {
-          const request =
-            embed.requestFullscreen ||
-            embed.webkitRequestFullscreen ||
-            embed.mozRequestFullScreen ||
-            embed.msRequestFullscreen;
-          if (request) {
+          const targets = [frame, embed];
+          for (const target of targets) {
+            const request =
+              target.requestFullscreen ||
+              target.webkitRequestFullscreen ||
+              target.mozRequestFullScreen ||
+              target.msRequestFullscreen;
+            if (!request) continue;
             try {
-              request.call(embed);
-              logPlay("requestFullscreen", { ok: true });
+              request.call(target);
+              break;
             } catch (err) {
-              logPlay("requestFullscreen", { ok: false, error: String(err) });
               console.warn("Fullscreen request failed:", err);
             }
           }
@@ -1388,7 +1187,6 @@ function selectRandom(items, count, excludeSlug) {
             if (!adOverlay || adOverlay.classList.contains("is-visible")) return;
             const now = Date.now();
             if (adLastClosedAt && now - adLastClosedAt < 30000) return;
-            logPlay("adIntervalShow", { now });
             showAdOverlay();
           }, 30000);
         }
@@ -1406,10 +1204,8 @@ function selectRandom(items, count, excludeSlug) {
                 adOverlay.dataset.adLoaded = "true";
                 try {
                   (window.adsbygoogle = window.adsbygoogle || []).push({});
-                  logPlay("adsbygoogle.push", { ok: true });
                 } catch (error) {
                   // Ignore ad push errors during local testing.
-                  logPlay("adsbygoogle.push", { ok: false, error: String(error) });
                 }
                 return;
               }
@@ -1423,8 +1219,8 @@ function selectRandom(items, count, excludeSlug) {
       };
 
       const showAdOverlay = () => {
+        logDebug("showAdOverlay");
         if (!adOverlay) {
-          logPlay("showAdOverlay", { ok: false, reason: "missing overlay" });
           startGame();
           return;
         }
@@ -1433,8 +1229,6 @@ function selectRandom(items, count, excludeSlug) {
         }
         adOverlay.classList.add("is-visible");
         adOverlay.setAttribute("aria-hidden", "false");
-        logPlay("showAdOverlay", { ok: true });
-        showToast("Loading ad…");
         const skipDelay = 10;
         const closeDelay = 20;
         if (adSkip) {
@@ -1521,21 +1315,17 @@ function selectRandom(items, count, excludeSlug) {
           if (isiOS) {
             embed.classList.add("is-fake-fullscreen");
             document.body.classList.add("is-fake-fullscreen");
-            logPlay("fakeFullscreen", { ok: true, reason: "no requestFullscreen" });
           }
           return;
         }
         try {
           request.call(embed);
-          logPlay("requestFrameFullscreen", { ok: true });
         } catch (err) {
           if (isiOS) {
             embed.classList.add("is-fake-fullscreen");
             document.body.classList.add("is-fake-fullscreen");
-            logPlay("fakeFullscreen", { ok: true, reason: "request failed" });
           } else {
             console.warn("Fullscreen request failed:", err);
-            logPlay("requestFrameFullscreen", { ok: false, error: String(err) });
           }
         }
       };
@@ -1547,44 +1337,32 @@ function selectRandom(items, count, excludeSlug) {
       });
 
       playButton.addEventListener("click", () => {
+        logDebug("playClick");
         if (embed.dataset.state === "playing") return;
         embed.classList.add("show-back");
         if (src && !frame.getAttribute("src")) {
           frame.src = src;
         }
-        if (debugLines) {
-          debugLines.textContent = "playClick: handler fired";
-        }
-        logPlay("playClick", { srcSet: !!frame.getAttribute("src") });
         if (typeof window.gtag === "function") {
           window.gtag("event", "play_click", {
             gamename: "Subway Surfers",
             page: "subway-surfers",
             debug_mode: true
           });
-          logPlay("gtag", { ok: true });
         }
         requestFrameFullscreen();
         startGame();
         const canShowAd = !!(adOverlay && adFrame && window.adsbygoogle);
         if (canShowAd) {
           showAdOverlay();
-        } else {
-          showToast("Ad blocked — starting game.");
-          logPlay("adBlocked", {
-            hasOverlay: !!adOverlay,
-            hasFrame: !!adFrame,
-            hasAdsByGoogle: !!window.adsbygoogle
-          });
         }
       });
 
       const finishAd = () => {
+        logDebug("finishAd");
         hideAdOverlay();
         adLastClosedAt = Date.now();
-        logPlay("finishAd", { adLastClosedAt });
         startGame();
-        showToast("Enjoy!");
         setTimeout(resumeGameFocus, 50);
         setTimeout(resumeGameFocus, 350);
       };
@@ -1617,39 +1395,20 @@ function selectRandom(items, count, excludeSlug) {
     }
 
     function initPage() {
-      window.__PLAY_DEBUG_PAGE__ = true;
-      if (window.__PLAY_DEBUG_LOG__) window.__PLAY_DEBUG_LOG__("initPage:start");
-      try {
-        const games = loadGamesFromEmbedded();
-        if (window.__PLAY_DEBUG_LOG__) window.__PLAY_DEBUG_LOG__("initPage:games", { count: games.length });
-        renderRail(prioritizeGames(games, playableSlugs, 14, currentSlug));
-        if (window.__PLAY_DEBUG_LOG__) window.__PLAY_DEBUG_LOG__("initPage:rail");
-        renderRecommend(selectRandom(games, 12, currentSlug));
-        if (window.__PLAY_DEBUG_LOG__) window.__PLAY_DEBUG_LOG__("initPage:recommend");
-        renderCarousel(prioritizeGames(games, playableSlugs, 20, currentSlug));
-        if (window.__PLAY_DEBUG_LOG__) window.__PLAY_DEBUG_LOG__("initPage:carousel");
-        injectContentFallback();
-        formatDetails();
-        if (window.__PLAY_DEBUG_LOG__) window.__PLAY_DEBUG_LOG__("initPage:details");
-        initGameEmbed();
-        if (window.__PLAY_DEBUG_LOG__) window.__PLAY_DEBUG_LOG__("initPage:embed");
-        const dev = document.querySelector(".player-dev");
-        if (dev && dev.textContent.trim().toLowerCase() === "unknown") {
-          dev.remove();
-        }
-      } catch (error) {
-        if (window.__PLAY_DEBUG_LOG__) {
-          window.__PLAY_DEBUG_LOG__("initPage:error", { error: String(error) });
-        }
+      const games = loadGamesFromEmbedded();
+      renderRail(prioritizeGames(games, playableSlugs, 14, currentSlug));
+      renderRecommend(selectRandom(games, 12, currentSlug));
+      renderCarousel(prioritizeGames(games, playableSlugs, 20, currentSlug));
+      injectContentFallback();
+      formatDetails();
+      initGameEmbed();
+      const dev = document.querySelector(".player-dev");
+      if (dev && dev.textContent.trim().toLowerCase() === "unknown") {
+        dev.remove();
       }
     }
 
     initPage();
-    document.addEventListener("DOMContentLoaded", () => {
-      if (!window.__PLAY_DEBUG_PAGE__) {
-        initPage();
-      }
-    });
 
   </script>
   <script>
