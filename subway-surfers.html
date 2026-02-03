@@ -535,6 +535,30 @@
       display: block;
     }
 
+    .play-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%) translateY(12px);
+      background: rgba(15, 23, 42, 0.92);
+      color: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      box-shadow: 0 10px 24px rgba(2, 6, 23, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 10000;
+    }
+
+    .play-toast.is-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
 
     aside {
       display: flex;
@@ -831,8 +855,10 @@
       <p>Enjoy more games on the main portal.</p>
     </footer>
   </div>
+  <div class="play-toast" role="status" aria-live="polite"></div>
 
   <script>
+    const ENABLE_PLAY_TOAST = true;
     const currentSlug = "subway-surfers";
 
     const playableSlugs = [
@@ -1145,16 +1171,30 @@ function selectRandom(items, count, excludeSlug) {
       const adFrame = embed.querySelector(".ad-frame");
       const adSkip = embed.querySelector(".ad-skip");
       const adClose = embed.querySelector(".ad-close");
+      const toastEl = document.querySelector(".play-toast");
+      let toastTimer = null;
       let adIntervalId = null;
       let adLastClosedAt = 0;
       if (!playButton || !frame) return;
       const src = frame.dataset.src;
+      const showToast = (message, duration = 1800) => {
+        if (!ENABLE_PLAY_TOAST || !toastEl) return;
+        toastEl.textContent = message;
+        toastEl.classList.add("is-visible");
+        if (toastTimer) {
+          clearTimeout(toastTimer);
+        }
+        toastTimer = setTimeout(() => {
+          toastEl.classList.remove("is-visible");
+        }, duration);
+      };
       const startGame = () => {
         if (embed.dataset.state === "playing") return;
         embed.dataset.state = "playing";
         if (src) {
           frame.src = src;
         }
+        showToast("Starting game…");
         const isMobile = window.matchMedia && window.matchMedia("(max-width: 640px)").matches;
         if (isMobile) {
           const request =
@@ -1217,6 +1257,7 @@ function selectRandom(items, count, excludeSlug) {
         }
         adOverlay.classList.add("is-visible");
         adOverlay.setAttribute("aria-hidden", "false");
+        showToast("Loading ad…");
         const skipDelay = 10;
         const closeDelay = 20;
         if (adSkip) {
@@ -1342,6 +1383,8 @@ function selectRandom(items, count, excludeSlug) {
         const canShowAd = !!(adOverlay && adFrame && window.adsbygoogle);
         if (canShowAd) {
           showAdOverlay();
+        } else {
+          showToast("Ad blocked — starting game.");
         }
       });
 
@@ -1349,6 +1392,7 @@ function selectRandom(items, count, excludeSlug) {
         hideAdOverlay();
         adLastClosedAt = Date.now();
         startGame();
+        showToast("Enjoy!");
         setTimeout(resumeGameFocus, 50);
         setTimeout(resumeGameFocus, 350);
       };
