@@ -1,4 +1,5 @@
 window.SITE_CONFIG = {
+  assetVersion: "20260203",
   extraHeadHTML: "<meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"referrer\" content=\"no-referrer-when-downgrade\"><script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252\" crossorigin=\"anonymous\"></script>",
   analyticsHTML: "<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-449VYY7XNQ\"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-449VYY7XNQ');</script>",
   moduleScriptSrc: "/integrate.js",
@@ -25,6 +26,27 @@ window.SITE_CONFIG = {
   window.__SITE_CONFIG_INJECTED = true;
 
   const cfg = window.SITE_CONFIG || {};
+  const assetVersion = (cfg.assetVersion || "").toString().trim();
+
+  function withVersion(url, version) {
+    if (!url || !version) return url || "";
+    const clean = url.replace(/([?&])v=\\d+(&?)/, (match, start, tail) => {
+      if (start === "?" && tail) return "?";
+      if (start === "&" && !tail) return "";
+      return start;
+    });
+    const joiner = clean.includes("?") ? "&" : "?";
+    return clean + joiner + "v=" + version;
+  }
+
+  function applyAssetVersion() {
+    if (!assetVersion) return;
+    document.querySelectorAll('link[rel="stylesheet"][href*="global.css"]').forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      const next = withVersion(href, assetVersion);
+      if (next && href !== next) link.setAttribute("href", next);
+    });
+  }
 
   function appendHTML(target, html) {
     if (!target || !html) return;
@@ -82,11 +104,12 @@ window.SITE_CONFIG = {
 
   function appendModuleScript(src) {
     if (!src) return;
-    const selector = 'script[type="module"][src="' + src + '"]';
+    const versionedSrc = assetVersion ? withVersion(src, assetVersion) : src;
+    const selector = 'script[type="module"][src="' + versionedSrc + '"]';
     if (document.querySelector(selector)) return;
     const script = document.createElement("script");
     script.type = "module";
-    script.src = src;
+    script.src = versionedSrc;
     if (document.body) {
       document.body.appendChild(script);
       return;
@@ -186,6 +209,8 @@ window.SITE_CONFIG = {
     `;
     main.insertBefore(section, main.firstElementChild);
   }
+
+  applyAssetVersion();
 
   function initGameEmbeds() {
     document.querySelectorAll(".game-embed").forEach((embed) => {
