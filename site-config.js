@@ -304,6 +304,18 @@ window.SITE_CONFIG = {
           startGame();
           return;
         }
+        if (adFrame) {
+          adFrame.innerHTML = "";
+          const adIns = document.createElement("ins");
+          adIns.className = "adsbygoogle";
+          adIns.style.display = "block";
+          adIns.setAttribute("data-ad-client", "ca-pub-3691583433336252");
+          adIns.setAttribute("data-ad-slot", "4683634709");
+          adIns.setAttribute("data-ad-format", "auto");
+          adIns.setAttribute("data-full-width-responsive", "true");
+          adFrame.appendChild(adIns);
+          adOverlay.dataset.adLoaded = "false";
+        }
         adOverlay.classList.add("is-visible");
         adOverlay.setAttribute("aria-hidden", "false");
         const skipDelay = 10;
