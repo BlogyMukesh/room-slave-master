@@ -467,7 +467,53 @@
       <main>
         
 
-        <section class="carousel" aria-label="More games">
+                <section class="carousel" aria-label="More games">
+          <script>
+            (function ensureAdSenseScript() {
+              const existing = document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]');
+              if (existing) return;
+              const script = document.createElement("script");
+              script.async = true;
+              script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252";
+              script.setAttribute("crossorigin", "anonymous");
+              document.head.appendChild(script);
+            })();
+          </script>
+          <!-- R1 -->
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-3691583433336252"
+               data-ad-slot="7315360452"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+            (function initCarouselAd() {
+              const ins = document.currentScript && document.currentScript.previousElementSibling;
+              if (!ins || ins.tagName !== "INS") return;
+              let pushed = false;
+              const tryPush = () => {
+                if (pushed || !window.adsbygoogle) return;
+                if (ins.getAttribute("data-adsbygoogle-status")) return;
+                try {
+                  (adsbygoogle = window.adsbygoogle || []).push({});
+                  pushed = true;
+                } catch (err) {
+                  // Ignore ad push errors until the script is ready.
+                }
+              };
+              let attempts = 0;
+              const maxAttempts = 20;
+              const timer = setInterval(() => {
+                attempts += 1;
+                if (attempts >= maxAttempts || pushed) {
+                  clearInterval(timer);
+                  return;
+                }
+                tryPush();
+              }, 250);
+              tryPush();
+            })();
+          </script>
           <div class="carousel-row" id="carouselRow"></div>
         </section>
 
