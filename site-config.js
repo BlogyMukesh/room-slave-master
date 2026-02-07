@@ -176,7 +176,7 @@ window.SITE_CONFIG = {
               <ins class="adsbygoogle"
                    style="display:block"
                    data-ad-client="ca-pub-3691583433336252"
-                   data-ad-slot="7315360452"
+                   data-ad-slot="4683634709"
                    data-ad-format="auto"
                    data-full-width-responsive="true"></ins>
             </div>
