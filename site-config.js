@@ -1,3 +1,4 @@
+const existingSiteConfig = window.SITE_CONFIG || {};
 window.SITE_CONFIG = {
   extraHeadHTML: "<meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"referrer\" content=\"no-referrer-when-downgrade\"><script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252\" crossorigin=\"anonymous\"></script>",
   analyticsHTML: "<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-449VYY7XNQ\"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-449VYY7XNQ');</script>",
@@ -17,7 +18,8 @@ window.SITE_CONFIG = {
     "https://g.igroutka.ru/games/793/2xTdm6GrXEuN0Kwq/fe831138-3321-40ed-b8cd-f1c482091e04/index.html",
     "https://s3.ap-south-1.amazonaws.com/htg.gamezi.com/stickman-hook/index.html",
     "https://azgames.io/game/temple-run-2/"
-  ]
+  ],
+  ...existingSiteConfig
 };
 
 (function initSiteConfig() {
