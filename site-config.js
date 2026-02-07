@@ -310,7 +310,7 @@ window.SITE_CONFIG = {
           adIns.className = "adsbygoogle";
           adIns.style.display = "block";
           adIns.setAttribute("data-ad-client", "ca-pub-3691583433336252");
-          adIns.setAttribute("data-ad-slot", "4683634709");
+          adIns.setAttribute("data-ad-slot", "6800903872");
           adIns.setAttribute("data-ad-format", "auto");
           adIns.setAttribute("data-full-width-responsive", "true");
           adFrame.appendChild(adIns);

@@ -800,7 +800,7 @@
                   <ins class="adsbygoogle"
                        style="display:block"
                        data-ad-client="ca-pub-3691583433336252"
-                       data-ad-slot="7315360452"
+                       data-ad-slot="6800903872"
                        data-ad-format="auto"
                        data-full-width-responsive="true"></ins>
                 </div>
@@ -1238,7 +1238,7 @@ function selectRandom(items, count, excludeSlug) {
         }
       };
 
-      const pushAdWhenReady = () => {
+            const pushAdWhenReady = () => {
         if (!adOverlay || !adFrame || adOverlay.dataset.adLoaded === "true") return;
         const ins = adFrame.querySelector("ins.adsbygoogle");
         if (!ins) return;
@@ -1247,11 +1247,19 @@ function selectRandom(items, count, excludeSlug) {
             requestAnimationFrame(() => {
               const width = adFrame.getBoundingClientRect().width;
               if (width > 0) {
-                adOverlay.dataset.adLoaded = "true";
+                if (!window.adsbygoogle) {
+                  if (attemptsLeft > 0) {
+                    setTimeout(() => tryPush(attemptsLeft - 1), 300);
+                  }
+                  return;
+                }
                 try {
                   (window.adsbygoogle = window.adsbygoogle || []).push({});
+                  adOverlay.dataset.adLoaded = "true";
                 } catch (error) {
-                  // Ignore ad push errors during local testing.
+                  if (attemptsLeft > 0) {
+                    setTimeout(() => tryPush(attemptsLeft - 1), 300);
+                  }
                 }
                 return;
               }
@@ -1261,17 +1269,26 @@ function selectRandom(items, count, excludeSlug) {
             });
           });
         };
-        tryPush(6);
+        tryPush(8);
       };
 
-      const showAdOverlay = () => {
+            const showAdOverlay = () => {
         logDebug("showAdOverlay");
         if (!adOverlay) {
           startGame();
           return;
         }
-        if (src && !frame.getAttribute("src")) {
-          frame.src = src;
+        if (adFrame) {
+          adFrame.innerHTML = "";
+          const adIns = document.createElement("ins");
+          adIns.className = "adsbygoogle";
+          adIns.style.display = "block";
+          adIns.setAttribute("data-ad-client", "ca-pub-3691583433336252");
+          adIns.setAttribute("data-ad-slot", "6800903872");
+          adIns.setAttribute("data-ad-format", "auto");
+          adIns.setAttribute("data-full-width-responsive", "true");
+          adFrame.appendChild(adIns);
+          adOverlay.dataset.adLoaded = "false";
         }
         adOverlay.classList.add("is-visible");
         adOverlay.setAttribute("aria-hidden", "false");
