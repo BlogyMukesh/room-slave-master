@@ -1232,44 +1232,41 @@ function selectRandom(items, count, excludeSlug) {
             if (embed.dataset.state !== "playing") return;
             if (!adOverlay || adOverlay.classList.contains("is-visible")) return;
             const now = Date.now();
-            if (adLastClosedAt && now - adLastClosedAt < 30000) return;
+            if (adLastClosedAt && now - adLastClosedAt < 15000) return;
             showAdOverlay();
-          }, 30000);
+          }, 15000);
         }
       };
 
-            const pushAdWhenReady = () => {
+      const pushAdWhenReady = () => {
         if (!adOverlay || !adFrame || adOverlay.dataset.adLoaded === "true") return;
         const ins = adFrame.querySelector("ins.adsbygoogle");
         if (!ins) return;
-        const tryPush = (attemptsLeft) => {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              const width = adFrame.getBoundingClientRect().width;
-              if (width > 0) {
-                if (!window.adsbygoogle) {
-                  if (attemptsLeft > 0) {
-                    setTimeout(() => tryPush(attemptsLeft - 1), 300);
-                  }
-                  return;
-                }
-                try {
-                  (window.adsbygoogle = window.adsbygoogle || []).push({});
-                  adOverlay.dataset.adLoaded = "true";
-                } catch (error) {
-                  if (attemptsLeft > 0) {
-                    setTimeout(() => tryPush(attemptsLeft - 1), 300);
-                  }
-                }
-                return;
-              }
-              if (attemptsLeft > 0) {
-                setTimeout(() => tryPush(attemptsLeft - 1), 200);
-              }
-            });
-          });
+        let tries = 0;
+        const maxTries = 40;
+        const interval = 250;
+        const attemptPush = () => {
+          if (!adOverlay.classList.contains("is-visible")) {
+            clearInterval(timer);
+            return;
+          }
+          tries += 1;
+          const width = adFrame.getBoundingClientRect().width;
+          if (!window.adsbygoogle || width <= 0) {
+            if (tries >= maxTries) clearInterval(timer);
+            return;
+          }
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+            adOverlay.dataset.adLoaded = "true";
+            clearInterval(timer);
+          } catch (error) {
+            if (tries >= maxTries) clearInterval(timer);
+          }
         };
-        tryPush(8);
+        const timer = setInterval(attemptPush, interval);
+        attemptPush();
+        window.addEventListener("load", attemptPush, { once: true });
       };
 
             const showAdOverlay = () => {
