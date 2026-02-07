@@ -13,7 +13,7 @@ window.SITE_CONFIG = {
     "https://s3.ap-south-1.amazonaws.com/htg.gamezi.com/level-devil/index.html",
     "https://g.igroutka.ru/games/1278/hMRVJrwIQ8mYf6AS/d4d99b3a-cc26-41af-98df-da4c196e5308/index.html",
     "https://worms.zone/game/web/",
-    "https://gamecollections.me/game/3kh0-assets-main/subway-surfers-ny/",
+    "https://s3.ap-south-1.amazonaws.com/htg.gamezi.com/subway-surfers-ny/index.html",
     "https://g.igroutka.ru/games/793/2xTdm6GrXEuN0Kwq/fe831138-3321-40ed-b8cd-f1c482091e04/index.html",
     "https://s3.ap-south-1.amazonaws.com/htg.gamezi.com/stickman-hook/index.html",
     "https://azgames.io/game/temple-run-2/"
