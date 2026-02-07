@@ -473,9 +473,15 @@
                data-full-width-responsive="true"></ins>
           <script>
             (function initCarouselAd() {
-              const pushAd = () => {
+              const ins = document.currentScript && document.currentScript.previousElementSibling;
+              if (!ins || ins.tagName !== "INS") return;
+              let pushed = false;
+              const tryPush = () => {
+                if (pushed || !window.adsbygoogle) return;
+                if (ins.getAttribute("data-adsbygoogle-status")) return;
                 try {
                   (adsbygoogle = window.adsbygoogle || []).push({});
+                  pushed = true;
                 } catch (err) {
                   // Ignore ad push errors until the script is ready.
                 }
@@ -484,18 +490,13 @@
               const maxAttempts = 20;
               const timer = setInterval(() => {
                 attempts += 1;
-                if (window.adsbygoogle) {
+                if (attempts >= maxAttempts || pushed) {
                   clearInterval(timer);
-                  pushAd();
-                } else if (attempts >= maxAttempts) {
-                  clearInterval(timer);
+                  return;
                 }
+                tryPush();
               }, 250);
-              window.addEventListener("load", () => {
-                if (window.adsbygoogle) {
-                  pushAd();
-                }
-              });
+              tryPush();
             })();
           </script>
           <div class="carousel-row" id="carouselRow"></div>
