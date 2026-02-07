@@ -463,7 +463,17 @@
         
 
         <section class="carousel" aria-label="More games">
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252" crossorigin="anonymous"></script>
+          <script>
+            (function ensureAdSenseScript() {
+              const existing = document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]');
+              if (existing) return;
+              const script = document.createElement("script");
+              script.async = true;
+              script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252";
+              script.setAttribute("crossorigin", "anonymous");
+              document.head.appendChild(script);
+            })();
+          </script>
           <!-- R1 -->
           <ins class="adsbygoogle"
                style="display:block"
