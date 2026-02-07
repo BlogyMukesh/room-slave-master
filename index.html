@@ -359,20 +359,27 @@
         .join("");
     }
     function sendGameClick(href, name) {
-      const callback = () => {
+      let navigated = false;
+      const navigate = () => {
+        if (navigated) return;
+        navigated = true;
         if (typeof href === "string") {
           window.location = href;
         }
       };
+      const fallbackId = setTimeout(navigate, 150);
       if (typeof window.gtag !== "function") {
-        callback();
+        navigate();
         return;
       }
       window.gtag("event", "game_click", {
         gamename: name,
         page: "index",
         debug_mode: true,
-        event_callback: callback,
+        event_callback: () => {
+          clearTimeout(fallbackId);
+          navigate();
+        },
         event_timeout: 2000
       });
     }
@@ -380,10 +387,6 @@
     mosaic.addEventListener("click", (event) => {
       const tile = event.target.closest(".tile");
       if (!tile) return;
-      console.log("game_click", {
-        title: tile.dataset.title || tile.getAttribute("aria-label") || "",
-        href: tile.getAttribute("href") || ""
-      });
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) {
         return;
       }
