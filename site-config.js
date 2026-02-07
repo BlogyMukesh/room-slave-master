@@ -274,11 +274,19 @@ window.SITE_CONFIG = {
             requestAnimationFrame(() => {
               const width = adFrame.getBoundingClientRect().width;
               if (width > 0) {
-                adOverlay.dataset.adLoaded = "true";
+                if (!window.adsbygoogle) {
+                  if (attemptsLeft > 0) {
+                    setTimeout(() => tryPush(attemptsLeft - 1), 300);
+                  }
+                  return;
+                }
                 try {
                   (window.adsbygoogle = window.adsbygoogle || []).push({});
+                  adOverlay.dataset.adLoaded = "true";
                 } catch (error) {
-                  // Ignore ad push errors during local testing.
+                  if (attemptsLeft > 0) {
+                    setTimeout(() => tryPush(attemptsLeft - 1), 300);
+                  }
                 }
                 return;
               }
@@ -288,7 +296,7 @@ window.SITE_CONFIG = {
             });
           });
         };
-        tryPush(6);
+        tryPush(8);
       };
 
       const showAdOverlay = () => {
