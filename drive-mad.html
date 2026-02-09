@@ -27,6 +27,19 @@
 
 
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252" crossorigin="anonymous"></script>
+  <script>
+    window.adsbygoogle = window.adsbygoogle || [];
+    window.adBreak = window.adConfig = function(o) { adsbygoogle.push(o); };
+
+    // Initialize Ad Placement API
+    adConfig({
+      preloadAdBreaks: 'on',
+      sound: 'on',
+      onReady: function() {
+        console.log('Ad Placement API ready');
+      }
+    });
+  </script>
 
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://example.com/index.html"},{"@type":"ListItem","position":2,"name":"Games","item":"https://example.com/index.html"},{"@type":"ListItem","position":3,"name":"Drive Mad","item":"https://example.com/drive-mad.html"}]}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Drive Mad","description":"Play Drive Mad online and enjoy a fast, accessible browser game experience.","image":"https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/00f074792a313e1c7edd4baa0fa64b89/drive-mad.png","url":"https://example.com/drive-mad.html","genre":"Game","publisher":{"@type":"Organization","name":"Unknown"},"developer":{"@type":"Organization","name":"Unknown"},"operatingSystem":"Web","applicationCategory":"Game","inLanguage":"en","offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}</script>
