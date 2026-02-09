@@ -259,9 +259,9 @@ window.SITE_CONFIG = {
             if (embed.dataset.state !== "playing") return;
             if (!adOverlay || adOverlay.classList.contains("is-visible")) return;
             const now = Date.now();
-            if (adLastClosedAt && now - adLastClosedAt < 15000) return;
+            if (adLastClosedAt && now - adLastClosedAt < 30000) return;
             showAdOverlay();
-          }, 15000);
+          }, 30000);
         }
       };
 
