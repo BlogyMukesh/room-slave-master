@@ -624,8 +624,8 @@
     }
 
 </style>
-  <link rel="stylesheet" href="global.css?v=202602071">
-  <script src="site-config.js?v=202602071"></script>
+  <link rel="stylesheet" href="global.css?v=202602171">
+  <script src="site-config.js?v=202602271"></script>
   <script src="debug.js"></script>
   <script>
     if (window.SITE_CONFIG) {
@@ -1352,6 +1352,30 @@ function selectRandom(items, count, excludeSlug) {
         document.body.classList.toggle("is-fullscreen", isFull);
       });
 
+      const showPrerollAd = () => {
+        if (typeof window.adBreak !== "function") return false;
+        try {
+          window.adBreak({
+            type: "preroll",
+            name: "game_init",
+            beforeAd: () => {
+              logDebug("prerollAdStart");
+            },
+            adBreakDone: (placementInfo) => {
+              if (placementInfo && placementInfo.breakStatus) {
+                logDebug("prerollAdDone:" + placementInfo.breakStatus);
+              } else {
+                logDebug("prerollAdDone");
+              }
+            }
+          });
+          return true;
+        } catch (err) {
+          console.warn("preroll adBreak failed:", err);
+          return false;
+        }
+      };
+
       playButton.addEventListener("click", () => {
         logDebug("playClick");
         if (embed.dataset.state === "playing") return;
@@ -1369,6 +1393,7 @@ function selectRandom(items, count, excludeSlug) {
           });
         }
 requestFrameFullscreen();
+        showPrerollAd();
         startGame();
         const canShowAd = !!(adOverlay && adFrame && window.adsbygoogle);
         if (canShowAd) {
