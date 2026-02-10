@@ -11,6 +11,8 @@
   gtag("js", new Date());
   gtag("config", "G-449VYY7XNQ");
 </script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3691583433336252"
+     crossorigin="anonymous"></script>
   <style>
     :root {
       --bg: #7defe8;
@@ -348,7 +350,7 @@
     }
     function renderTiles() {
       mosaic.innerHTML = games
-        .map((game, index) => {
+        .map((game) => {
           return `
             <a class="tile ${game.sizeVariant}" href="${slugify(game.title)}.html" aria-label="${game.title}" data-title="${game.title}">
               <img class="tile-img" src="${game.imageUrl}" alt="${game.title} thumbnail" loading="lazy" decoding="async" />
@@ -409,6 +411,22 @@
     );
 
     renderTiles();
+    const tiles = mosaic.querySelectorAll(".tile");
+    if (tiles[8]) {
+      tiles[8].insertAdjacentHTML(
+        "afterend",
+        `
+<!-- R1 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3691583433336252"
+     data-ad-slot="7315360452"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+        `
+      );
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    }
   </script>
   <script>
     if (window.SITE_CONFIG) {
