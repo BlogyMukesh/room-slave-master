@@ -349,16 +349,27 @@
         .replace(/^-+|-+$/g, "");
     }
     function renderTiles() {
-      mosaic.innerHTML = games
-        .map((game) => {
-          return `
-            <a class="tile ${game.sizeVariant}" href="${slugify(game.title)}.html" aria-label="${game.title}" data-title="${game.title}">
-              <img class="tile-img" src="${game.imageUrl}" alt="${game.title} thumbnail" loading="lazy" decoding="async" />
-              <div class="tile-inner">${game.title}</div>
-            </a>
-          `;
-        })
-        .join("");
+      const tiles = [];
+      games.forEach((game, index) => {
+        tiles.push(`
+          <a class="tile ${game.sizeVariant}" href="${slugify(game.title)}.html" aria-label="${game.title}" data-title="${game.title}">
+            <img class="tile-img" src="${game.imageUrl}" alt="${game.title} thumbnail" loading="lazy" decoding="async" />
+            <div class="tile-inner">${game.title}</div>
+          </a>
+        `);
+        if (index === 8) {
+          tiles.push(`
+<!-- R1 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-3691583433336252"
+     data-ad-slot="7315360452"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+          `);
+        }
+      });
+      mosaic.innerHTML = tiles.join("");
     }
     function sendGameClick(href, name) {
       let navigated = false;
@@ -411,20 +422,8 @@
     );
 
     renderTiles();
-    const tiles = mosaic.querySelectorAll(".tile");
-    if (tiles[8]) {
-      tiles[8].insertAdjacentHTML(
-        "afterend",
-        `
-<!-- R1 -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-3691583433336252"
-     data-ad-slot="7315360452"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-        `
-      );
+    const adSlot = mosaic.querySelector(".adsbygoogle");
+    if (adSlot) {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     }
   </script>
