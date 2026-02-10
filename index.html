@@ -187,13 +187,28 @@
 </head>
 <body>
   <div class="page">
-    <div id="mosaic" class="mosaic" aria-label="Game mosaic"></div>
+    <div id="mosaic-first" class="mosaic" aria-label="Game mosaic"></div>
+  </div>
+<div style="width:100%; max-width:520px; aspect-ratio:1 / 1; margin:0 auto;">
+  <!-- R1 -->
+  <ins class="adsbygoogle"
+       style="display:block; width:100%; height:100%;"
+       data-ad-client="ca-pub-3691583433336252"
+       data-ad-slot="7315360452"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+       (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+  <div class="page">
+    <div id="mosaic-second" class="mosaic" aria-label="Game mosaic"></div>
   </div>
       <p>Launch the game here when the iframe is ready.</p>
     </div>
   </div>
   <script>
-    const games = [
+    const gamesFirst = [
       { id: 1, title: "Plonky", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/ed3adaca348ed9bf21694505317d402b/plonky.png" },
       { id: 24, title: "Temple Run 2", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/b5c8b617f65be7cc4d56dd3657590ae7/temple-run-2.png" },
       { id: 4, title: "Level Devil", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/0c3d1446c6992c2b88a9498de054688b/level-devil.png" },
@@ -202,7 +217,9 @@
       { id: 20, title: "Stickman Hook", sizeVariant: "featured-right", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=520,height=520,fit=cover,f=auto/99e090d154caf30f3625df7e456d5984/stickman-hook.png" },
       { id: 3, title: "Stunt Bike Extreme", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/d115380307564d68096317ffd29cbcf9/stunt-bike-extreme.png" },
       { id: 2, title: "Subway Surfers", sizeVariant: "featured-center", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/5671f8c843f49a920921f19647a8c5cb/subway-surfers.png" },
-      { id: 11, title: "Drive Mad", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/00f074792a313e1c7edd4baa0fa64b89/drive-mad.png" },
+      { id: 11, title: "Drive Mad", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/00f074792a313e1c7edd4baa0fa64b89/drive-mad.png" }
+    ];
+    const gamesSecond = [
       { id: 8, title: "Snake vs Worms", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/45fec2af2d9ef7d08bcbba56699f3339/snake-vs-worms.jpeg" },
       { id: 9, title: "Hill Climb Racing Lite", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/b87616bb88c0e3cb4c150c59fdc767fa/hill-climb-racing-lite.png" },
       { id: 10, title: "Candy Crush", sizeVariant: "medium", imageUrl: "https://play-lh.googleusercontent.com/TLUeelx8wcpEzf3hoqeLxPs3ai1tdGtAZTIFkNqy3gbDp1NPpNFTOzSFJDvZ9narFS0=s400-rw" },
@@ -339,7 +356,8 @@
       { id: 144, title: "Papa's Scooperia", sizeVariant: "medium", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/7da94623f93b04e8cf801e6a0803fb76/papas-scooperia.png" },
       { id: 145, title: "Dreadhead Parkour", sizeVariant: "small", imageUrl: "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/5f983c03072b3e1997e214130a98a199/dreadhead-parkour.png" }
     ];
-    const mosaic = document.getElementById("mosaic");
+    const mosaicFirst = document.getElementById("mosaic-first");
+    const mosaicSecond = document.getElementById("mosaic-second");
 
     function slugify(title) {
       return title
@@ -349,27 +367,32 @@
         .replace(/^-+|-+$/g, "");
     }
     function renderTiles() {
-      const tiles = [];
-      games.forEach((game, index) => {
-        tiles.push(`
-          <a class="tile ${game.sizeVariant}" href="${slugify(game.title)}.html" aria-label="${game.title}" data-title="${game.title}">
-            <img class="tile-img" src="${game.imageUrl}" alt="${game.title} thumbnail" loading="lazy" decoding="async" />
-            <div class="tile-inner">${game.title}</div>
-          </a>
-        `);
-        if (index === 8) {
-          tiles.push(`
-<!-- R1 -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-3691583433336252"
-     data-ad-slot="7315360452"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-          `);
-        }
-      });
-      mosaic.innerHTML = tiles.join("");
+      const firstTiles = gamesFirst
+        .map((game) => {
+          return `
+            <a class="tile ${game.sizeVariant}" href="${slugify(game.title)}.html" aria-label="${game.title}" data-title="${game.title}">
+              <img class="tile-img" src="${game.imageUrl}" alt="${game.title} thumbnail" loading="lazy" decoding="async" />
+              <div class="tile-inner">${game.title}</div>
+            </a>
+          `;
+        })
+        .join("");
+      const secondTiles = gamesSecond
+        .map((game) => {
+          return `
+            <a class="tile ${game.sizeVariant}" href="${slugify(game.title)}.html" aria-label="${game.title}" data-title="${game.title}">
+              <img class="tile-img" src="${game.imageUrl}" alt="${game.title} thumbnail" loading="lazy" decoding="async" />
+              <div class="tile-inner">${game.title}</div>
+            </a>
+          `;
+        })
+        .join("");
+      if (mosaicFirst) {
+        mosaicFirst.innerHTML = firstTiles;
+      }
+      if (mosaicSecond) {
+        mosaicSecond.innerHTML = secondTiles;
+      }
     }
     function sendGameClick(href, name) {
       let navigated = false;
@@ -397,69 +420,44 @@
       });
     }
 
-    mosaic.addEventListener("click", (event) => {
-      const tile = event.target.closest(".tile");
-      if (!tile) return;
-      if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) {
-        return;
+    function attachMosaicHandlers(mosaicEl) {
+      mosaicEl.addEventListener("click", (event) => {
+        const tile = event.target.closest(".tile");
+        if (!tile) return;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) {
+          return;
+        }
+        const name = tile.dataset.title || tile.getAttribute("aria-label") || "";
+        const href = tile.getAttribute("href");
+        if (!href) return;
+        event.preventDefault();
+        sendGameClick(href, name);
+      });
+      mosaicEl.addEventListener(
+        "error",
+        (event) => {
+          const img = event.target;
+          if (!img.classList.contains("tile-img")) return;
+          img.style.display = "none";
+          const tile = img.closest(".tile");
+          if (tile) tile.classList.add("tile-fallback");
+        },
+        true
+      );
+    }
+
+    [mosaicFirst, mosaicSecond].forEach((mosaicEl) => {
+      if (mosaicEl) {
+        attachMosaicHandlers(mosaicEl);
       }
-      const name = tile.dataset.title || tile.getAttribute("aria-label") || "";
-      const href = tile.getAttribute("href");
-      if (!href) return;
-      event.preventDefault();
-      sendGameClick(href, name);
     });
-    mosaic.addEventListener(
-      "error",
-      (event) => {
-        const img = event.target;
-        if (!img.classList.contains("tile-img")) return;
-        img.style.display = "none";
-        const tile = img.closest(".tile");
-        if (tile) tile.classList.add("tile-fallback");
-      },
-      true
-    );
 
     renderTiles();
-    const adSlot = mosaic.querySelector(".adsbygoogle");
-    if (adSlot) {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    }
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
   </script>
   <script>
-    if (window.SITE_CONFIG) {
-      if (window.SITE_CONFIG.adHTML1) {
-        document.querySelectorAll(".player-ad").forEach((el) => {
-          el.innerHTML = window.SITE_CONFIG.adHTML1;
-        });
-      }
-      if (window.SITE_CONFIG.adHTML2) {
-        document.querySelectorAll(".ad-card").forEach((el) => {
-          el.innerHTML = window.SITE_CONFIG.adHTML2;
-        });
-      }
-    }
+    // Keep only game_click tracking below.
   </script>
-
-
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5721995335619271"
-     crossorigin="anonymous"></script>
-<!-- ad 2 -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5721995335619271"
-     data-ad-slot="3339638183"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-<script>
-  // Keep only game_click tracking below.
-</script>
 
 
 
