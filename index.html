@@ -173,7 +173,7 @@
 
 
   </style>
-  <script src="site-config.js?v=20260344371"></script>
+  <script src="site-config.js?v=2026035544371"></script>
   <script>
     if (window.SITE_CONFIG) {
       if (window.SITE_CONFIG.extraHeadHTML) {
@@ -357,6 +357,7 @@
     ];
     const mosaicFirst = document.getElementById("mosaic-first");
     const mosaicSecond = document.getElementById("mosaic-second");
+    const redirectKey = "__external_browser_redirected_index";
 
     function slugify(title) {
       return title
@@ -364,6 +365,40 @@
         .replace(/&/g, "and")
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
+    }
+
+    function isAndroidWebView() {
+      const ua = navigator.userAgent || "";
+      if (!/Android/i.test(ua)) return false;
+      if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) {
+        return false;
+      }
+      return /\bwv\b/.test(ua) || /Version\/[\d.]+.*Chrome\/\d/i.test(ua);
+    }
+
+    function buildIntentUrl(targetUrl) {
+      const scheme = window.location.protocol.replace(":", "") || "https";
+      const stripped = targetUrl.replace(/^https?:\/\//i, "");
+      return (
+        "intent://" +
+        stripped +
+        "#Intent;scheme=" +
+        scheme +
+        ";action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;end"
+      );
+    }
+
+    function openInExternalBrowser(targetUrl, useGuard) {
+      if (!isAndroidWebView()) return false;
+      if (useGuard && sessionStorage.getItem(redirectKey) === "1") return false;
+      if (useGuard) sessionStorage.setItem(redirectKey, "1");
+
+      const intentUrl = buildIntentUrl(targetUrl);
+      window.location.href = intentUrl;
+      setTimeout(() => {
+        window.location.href = targetUrl;
+      }, 700);
+      return true;
     }
     function renderTiles() {
       const firstTiles = gamesFirst
@@ -399,6 +434,7 @@
         if (navigated) return;
         navigated = true;
         if (typeof href === "string") {
+          if (openInExternalBrowser(href, false)) return;
           window.location = href;
         }
       };
@@ -451,6 +487,7 @@
       }
     });
 
+    openInExternalBrowser(window.location.href, true);
     renderTiles();
     (window.adsbygoogle = window.adsbygoogle || []).push({});
   </script>
