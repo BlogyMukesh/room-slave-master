@@ -1,6 +1,107 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script>
+  // Add this script to your website's <head> or before </body>
+
+    function isWebView() {
+      const ua = navigator.userAgent || navigator.vendor || window.opera;
+      const rules = [
+        'WebView',
+        '(iPhone|iPod|iPad)(?!.*Safari/)',
+        'Android.*(wv|\.0\.0\.0)',
+        'FB_IAB', 'FBAN', 'FBAV',
+        'Instagram',
+        'GSA/',
+        'Line/',
+        'Twitter',
+        'LinkedIn'
+      ];
+      const regex = new RegExp('(' + rules.join('|') + ')', 'ig');
+      return !!ua.match(regex);
+    }
+    
+    if (isWebView()) {
+      // Block scrolling
+      document.body.style.overflow = 'hidden';
+    
+      // Create full-screen overlay
+      const overlay = document.createElement('div');
+      overlay.id = 'webview-overlay';
+      overlay.innerHTML = `
+        <div style="
+          position: fixed;
+          top: 0; left: 0;
+          width: 100%; height: 100%;
+          background: #ffffff;
+          z-index: 999999;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 20px;
+          box-sizing: border-box;
+          font-family: Arial, sans-serif;
+        ">
+          <img src="https://www.google.com/chrome/static/images/chrome-logo-m100.svg" 
+               alt="Chrome" style="width: 80px; height: 80px; margin-bottom: 20px;">
+          
+          <h1 style="font-size: 22px; color: #333; margin-bottom: 10px;">
+            Open in Chrome Browser
+          </h1>
+          
+          <p style="font-size: 15px; color: #666; max-width: 320px; line-height: 1.5; margin-bottom: 25px;">
+            For the best experience and to access all features, please open this page in Chrome browser.
+          </p>
+    
+          <a id="open-chrome-btn" style="
+            display: inline-block;
+            background: #4285F4;
+            color: #fff;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(66,133,244,0.4);
+            margin-bottom: 20px;
+          ">
+            Open in Chrome
+          </a>
+    
+          <p style="font-size: 13px; color: #999; max-width: 300px; line-height: 1.4;">
+            Tap the <strong>⋮</strong> menu (top right) and select <strong>"Open in Chrome"</strong> if the button doesn't work.
+          </p>
+        </div>
+      `;
+    
+      document.body.appendChild(overlay);
+    
+      // Handle "Open in Chrome" button click
+      document.getElementById('open-chrome-btn').addEventListener('click', function (e) {
+        e.preventDefault();
+        const url = window.location.href;
+    
+        if (/android/i.test(navigator.userAgent)) {
+          // Android: Intent to open in Chrome
+          window.location.href = 'intent://' + url.replace(/https?:\/\//, '') +
+            '#Intent;scheme=https;package=com.android.chrome;end';
+        } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+          // iOS: Try Chrome, fallback to Safari
+          window.location.href = 'googlechrome://' + url.replace(/https?:\/\//, '');
+          setTimeout(function () {
+            window.location.href = url;
+          }, 500);
+        } else {
+          // Fallback: copy URL
+          navigator.clipboard.writeText(url);
+          alert('URL copied! Please paste it in Chrome browser.');
+        }
+      });
+    }
+    </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cars Thief - Play Online</title>
